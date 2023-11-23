@@ -7,18 +7,19 @@ CREATE TABLE Organization
     Name            VARCHAR(50),
     AmountSponsored INTEGER,
     PRIMARY KEY (OrganizationID)
-)
+);
 
-CREATE TABLE Facility
+CREATE TABLE Sponsors
 (
-    FacilityID   INTEGER,
-    FacilityName VARCHAR(50),
-    Address      VARCHAR(50),
-    Capacity     INTEGER,
-    PRIMARY KEY (FacilityID)
-)
+    OrganizationID INTEGER,
+    TournamentID INTEGER,
+    AmountSponsored INTEGER,
+    PRIMARY KEY (OrganizationID, TournamentID),
+    FOREIGN KEY (OrganizationID) REFERENCES Organization,
+    FOREIGN KEY (TournamentID) REFERENCES Tournament
+);
 
-CREATE TABLE Tournament
+CREATE TABLE Tournaments
 (
     TournamentID INTEGER,
     Name         VARCHAR(50),
@@ -29,7 +30,34 @@ CREATE TABLE Tournament
     PRIMARY KEY (TournamentID),
     FOREIGN KEY (FacilityName) REFERENCES Facility,
     FOREIGN KEY (SponsorID) REFERENCES Organization
-)
+);
+
+CREATE TABLE HostedAt
+(
+    TournamentID INT,
+    FacilityID INT,
+    PRIMARY KEY (TournamentID, FacilityID)
+    FOREIGN KEY (TournamentID) REFERENCES Tournament,
+    FOREIGN KEY (FacilityID) REFERENCES Facility
+);
+
+CREATE TABLE Facility
+(
+    FacilityID   INTEGER,
+    FacilityName VARCHAR(50),
+    Address      VARCHAR(50),
+    Capacity     INTEGER,
+    PRIMARY KEY (FacilityID)
+);
+
+CREATE TABLE Participate
+(
+    TeamID          INTEGER,
+    TournamentID    INTEGER,
+    PRIMARY KEY (TournamentID, TeamID),
+    FOREIGN KEY (TeamID) REFERENCES Team,
+    FOREIGN KEY (TournamentID) REFERENCES Tournament
+);
 
 CREATE TABLE Club
 (
@@ -37,7 +65,16 @@ CREATE TABLE Club
     Name     VARCHAR(50),
     Location VARCHAR(50),
     PRIMARY KEY (ClubID)
-)
+);
+
+CREATE TABLE Manages
+(
+    ClubID   INTEGER,
+    TeamID   INTEGER,
+    PRIMARY KEY (ClubID, TeamID),
+    FOREIGN KEY (ClubID) REFERENCES Club,
+    FOREIGN KEY (TeamID) REFERENCES Team,
+);
 
 CREATE TABLE Team
 (
@@ -48,17 +85,36 @@ CREATE TABLE Team
     PRIMARY KEY (TeamID),
     FOREIGN KEY (ClubID) REFERENCES Club,
     FOREIGN KEY (CoachID) REFERENCES Coaches
-)
+);
+
+CREATE TABLE Members
+(
+    ID  INTEGER,
+    Name      VARCHAR(50),
+    PhoneNum  INTEGER,
+    Address   VARCHAR(50),
+    City      VARCHAR(50),
+    BirthDate DATE,
+    Age       INTEGER,
+    PRIMARY KEY (MemberID)
+);
+
+CREATE TABLE Coaches
+(
+    ID              INTEGER,
+    YearsCoached    INTEGER,
+    FOREIGN KEY (ID) REFERENCES Members,
+    PRIMARY KEY (ID)
+);
 
 CREATE TABLE Players
 (
-    PlayerID  INTEGER,
-    MemberID  INTEGER,
+    ID         INTEGER,
     JerseyNum INTEGER,
     Position  VARCHAR(50),
     TeamID    INTEGER,
     SIN       INTEGER,
-    PRIMARY KEY (PlayerID, MemberID),
+    PRIMARY KEY (ID),
     FOREIGN KEY (ID) REFERENCES Members,
     FOREIGN KEY (TeamID) REFERENCES Team,
     UNIQUE (SIN)
@@ -70,12 +126,11 @@ CREATE TABLE PlayerStats
     PlayerID      Integer,
     MatchesPlayed INTEGER,
     GamesWon      INTEGER,
-    NumofPoints   INTEGER,
+    NumOfPoints   INTEGER,
     PRIMARY KEY (StatID),
     FOREIGN KEY (PlayerID) REFERENCES Players,
     ON DELETE CASCADE
 )
-    )
 
 CREATE TABLE Certification
 (
@@ -85,25 +140,20 @@ CREATE TABLE Certification
     PRIMARY KEY (CertificationID)
 )
 
-CREATE TABLE Coaches
+CREATE TABLE Gets
 (
-    CoachID         INTEGER,
-    MemberID        INTEGER,
-    CertificateName VARCHAR(50),
-    YearsCoached    INTEGER,
+    ID              INTEGER,
+    CertificationID   INTEGER,
+    PRIMARY KEY (ID, CertificationID),
     FOREIGN KEY (ID) REFERENCES Members,
-    FOREIGN KEY (CertificateName) REFERENCES Certification,
-    PRIMARY KEY (MemberID)
-)
+    FOREIGN KEY (CertificationID) REFERENCES Certification
+);
 
-CREATE TABLE Members
+CREATE TABLE Teaches
 (
-    MemberID  INTEGER,
-    Name      VARCHAR(50),
-    PhoneNum  INTEGER,
-    Address   VARCHAR(50),
-    City      VARCHAR(50),
-    BirthDate DATE,
-    Age       INTEGER,
-    PRIMARY KEY (MemberID)
-)
+    TeamID     INTEGER,
+    ID         INTEGER,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (ID) REFERENCES Members,
+    FOREIGN KEY (TeamID) REFERENCES Team
+);
