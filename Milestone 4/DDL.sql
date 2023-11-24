@@ -1,5 +1,22 @@
 -- DDL From Milestone 2
 -- TODO: Need tables to account for Relations
+DROP TABLE Organization;
+DROP TABLE Facility;
+DROP TABLE Tournament;
+DROP TABLE Club;
+DROP TABLE Members;
+DROP TABLE Certification;
+DROP TABLE Sponsors;
+DROP TABLE HostedAt;
+DROP TABLE Coaches;
+DROP TABLE Team;
+DROP TABLE Manages;
+DROP TABLE Participate;
+DROP TABLE Players;
+DROP TABLE PlayerStats;
+DROP TABLE Gets;
+DROP TABLE Teaches;
+
 
 CREATE TABLE Organization
 (
@@ -9,17 +26,16 @@ CREATE TABLE Organization
     PRIMARY KEY (OrganizationID)
 );
 
-CREATE TABLE Sponsors
+CREATE TABLE Facility
 (
-    OrganizationID INTEGER,
-    TournamentID INTEGER,
-    AmountSponsored INTEGER,
-    PRIMARY KEY (OrganizationID, TournamentID),
-    FOREIGN KEY (OrganizationID) REFERENCES Organization,
-    FOREIGN KEY (TournamentID) REFERENCES Tournament
+    FacilityID   INTEGER,
+    FacilityName VARCHAR(50),
+    Address      VARCHAR(50),
+    Capacity     INTEGER,
+    PRIMARY KEY (FacilityID)
 );
 
-CREATE TABLE Tournaments
+CREATE TABLE Tournament
 (
     TournamentID INTEGER,
     Name         VARCHAR(50),
@@ -32,59 +48,12 @@ CREATE TABLE Tournaments
     FOREIGN KEY (SponsorID) REFERENCES Organization
 );
 
-CREATE TABLE HostedAt
-(
-    TournamentID INT,
-    FacilityID INT,
-    PRIMARY KEY (TournamentID, FacilityID)
-    FOREIGN KEY (TournamentID) REFERENCES Tournament,
-    FOREIGN KEY (FacilityID) REFERENCES Facility
-);
-
-CREATE TABLE Facility
-(
-    FacilityID   INTEGER,
-    FacilityName VARCHAR(50),
-    Address      VARCHAR(50),
-    Capacity     INTEGER,
-    PRIMARY KEY (FacilityID)
-);
-
-CREATE TABLE Participate
-(
-    TeamID          INTEGER,
-    TournamentID    INTEGER,
-    PRIMARY KEY (TournamentID, TeamID),
-    FOREIGN KEY (TeamID) REFERENCES Team,
-    FOREIGN KEY (TournamentID) REFERENCES Tournament
-);
-
 CREATE TABLE Club
 (
     ClubID   INTEGER,
     Name     VARCHAR(50),
     Location VARCHAR(50),
     PRIMARY KEY (ClubID)
-);
-
-CREATE TABLE Manages
-(
-    ClubID   INTEGER,
-    TeamID   INTEGER,
-    PRIMARY KEY (ClubID, TeamID),
-    FOREIGN KEY (ClubID) REFERENCES Club,
-    FOREIGN KEY (TeamID) REFERENCES Team,
-);
-
-CREATE TABLE Team
-(
-    TeamID     INTEGER,
-    ClubID     INTEGER,
-    CoachID    INTEGER,
-    NumPlayers INTEGER,
-    PRIMARY KEY (TeamID),
-    FOREIGN KEY (ClubID) REFERENCES Club,
-    FOREIGN KEY (CoachID) REFERENCES Coaches
 );
 
 CREATE TABLE Members
@@ -99,6 +68,33 @@ CREATE TABLE Members
     PRIMARY KEY (MemberID)
 );
 
+CREATE TABLE Certification
+(
+    CertificationID INTEGER,
+    CertificateName VARCHAR(50),
+    ExpirationDate  DATE,
+    PRIMARY KEY (CertificationID)
+);
+
+CREATE TABLE Sponsors
+(
+    OrganizationID INTEGER,
+    TournamentID INTEGER,
+    AmountSponsored INTEGER,
+    PRIMARY KEY (OrganizationID, TournamentID),
+    FOREIGN KEY (OrganizationID) REFERENCES Organization,
+    FOREIGN KEY (TournamentID) REFERENCES Tournament
+);
+
+CREATE TABLE HostedAt
+(
+    TournamentID INT,
+    FacilityID INT,
+    PRIMARY KEY (TournamentID, FacilityID)
+    FOREIGN KEY (TournamentID) REFERENCES Tournament,
+    FOREIGN KEY (FacilityID) REFERENCES Facility
+);
+
 CREATE TABLE Coaches
 (
     ID              INTEGER,
@@ -106,6 +102,36 @@ CREATE TABLE Coaches
     FOREIGN KEY (ID) REFERENCES Members,
     PRIMARY KEY (ID)
 );
+
+CREATE TABLE Team
+(
+    TeamID     INTEGER,
+    ClubID     INTEGER,
+    CoachID    INTEGER,
+    NumPlayers INTEGER,
+    PRIMARY KEY (TeamID),
+    FOREIGN KEY (ClubID) REFERENCES Club,
+    FOREIGN KEY (CoachID) REFERENCES Coaches
+);
+
+CREATE TABLE Manages
+(
+    ClubID   INTEGER,
+    TeamID   INTEGER,
+    PRIMARY KEY (ClubID, TeamID),
+    FOREIGN KEY (ClubID) REFERENCES Club,
+    FOREIGN KEY (TeamID) REFERENCES Team,
+);
+
+CREATE TABLE Participate
+(
+    TeamID          INTEGER,
+    TournamentID    INTEGER,
+    PRIMARY KEY (TournamentID, TeamID),
+    FOREIGN KEY (TeamID) REFERENCES Team,
+    FOREIGN KEY (TournamentID) REFERENCES Tournament
+);
+
 
 CREATE TABLE Players
 (
@@ -118,7 +144,7 @@ CREATE TABLE Players
     FOREIGN KEY (ID) REFERENCES Members,
     FOREIGN KEY (TeamID) REFERENCES Team,
     UNIQUE (SIN)
-)
+);
 
 CREATE TABLE PlayerStats
 (
@@ -128,17 +154,8 @@ CREATE TABLE PlayerStats
     GamesWon      INTEGER,
     NumOfPoints   INTEGER,
     PRIMARY KEY (StatID),
-    FOREIGN KEY (PlayerID) REFERENCES Players,
-    ON DELETE CASCADE
-)
-
-CREATE TABLE Certification
-(
-    CertificationID INTEGER,
-    CertificateName VARCHAR(50),
-    ExpirationDate  DATE,
-    PRIMARY KEY (CertificationID)
-)
+    FOREIGN KEY (PlayerID) REFERENCES Players ON DELETE CASCADE
+);
 
 CREATE TABLE Gets
 (
