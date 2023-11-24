@@ -1,5 +1,7 @@
 -- INSERT STATEMENTS FROM MILESTONE 2
 -- TODO: Need to modify based on new DDL
+
+
 INSERT INTO Organization(OrganizationID, Name, AmountSponsored)
 VALUES (0000001, 'OrganizationOne', 10000),
        (0000002, 'OrganizationTwo', 10000),
@@ -28,28 +30,12 @@ VALUES (0000001, 'ClubOne', '333 Sunny Ave'),
        (0000004, 'ClubFour', '3032 Bob Ave'),
        (0000005, 'ClubFive', '553 Smith St');
 
-INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers)
-VALUES (000001, 0000001, 11111, 11),
-       (000002, 0000002, 22222, 15),
-       (000003, 0000003, 33333, 10),
-       (000004, 0000004, 44444, 14),
-       (000005, 0000005, 55555, 10);
-
-#####
-
-INSERT INTO Players(PlayerID, MemberID,JerseyNum, Position, TeamID, SIN)
-VALUES (1001,001,00,"Power",000001,665577),
-(1015,002,10,"Middle",000001,556633),
-(1022,003,16,"Setter",000003,663321),
-(1010,004,09,"Power",000005,332244),
-(1032,005,99,"Libero",000005,562525S);
-
-INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumofPoints)
-VALUES (00000001, 1001, 5, 2, 2000),
-       (00000002, 1015, 15, 8, 500),
-       (00000003, 1022, 25, 10, 900),
-       (00000004, 1010, 30, 10, 3000),
-       (000000005, 1032, 1, 0, 100);
+INSERT INTO Members(ID, Name, PhoneNum, Address, City, Birthdate, Age)
+VALUES (001, 'Bob Smith', 6045555555, '123 Sunny Ave', 'Vancouver', 1996 - 01 - 01, 20),
+       (002, 'Joe David', 6045557777, '333 Flemings Ave', 'Vancouver', 1991 - 02 - 01, 19),
+       (003, 'Billy Smith', 6045555566, '555 Water Ave', 'Burnaby', 2000 - 11 - 10, 19),
+       (004, 'Sue Anderson', 6045555353, '6063 Blue Street', 'Richmond', 1996 - 01 - 01, 22),
+       (005, 'Michael Scott', 6045555151, '2323 80 Ave', 'Surrey', 1996 - 01 - 01, 24);
 
 INSERT INTO Certification(CertificationID, CertificateName, ExpirationDate)
 VALUES (55551, 'CertOne', 2023 - 06 - 12),
@@ -58,17 +44,73 @@ VALUES (55551, 'CertOne', 2023 - 06 - 12),
        (55554, 'CertFour', 2023 - 10 - 10),
        (55555, 'CertFive', 2023 - 06 - 13);
 
-INSERT INTO Coaches(CoachID, MemberID, CertificateName, YearsCoached)
-VALUES (00000010, 010, 'CertOne', 2),
-       (00000011, 012, 'CertOne', 3),
-       (00000012, 013, 'CertThree', 6),
-       (00000013, 020, 'CertTen', 12),
-       (00000014, 021, 'CertOne', 5);
+INSERT INTO Sponsors(OrganizationID, TournamentID, AmountSponsored)
+VALUES (0000001, 0000001, 100000),
+       (0000002, 0000002, 200000),
+       (0000003, 0000003, 300000),
+       (0000004, 0000004, 400000),
+       (0000005, 0000005, 500000);
 
-INSERT INTO Member(MemberID, Name, PhoneNum, Address, City, Birthdate, Age)
-VALUES (001, 'Bob Smith', 6045555555, '123 Sunny Ave', 'Vancouver', 1996 - 01 - 01, 20),
-       (002, 'Joe David', 6045557777, '333 Flemings Ave', 'Vancouver', 1991 - 02 - 01, 19),
-       (003, 'Billy Smith', 6045555566, '555 Water Ave', 'Burnaby', 2000 - 11 - 10, 19),
-       (004, 'Sue Anderson', 6045555353, '6063 Blue Street', 'Richmond', 1996 - 01 - 01, 22),
-       (005, 'Michael Scott', 6045555151, '2323 80 Ave', 'Surrey', 1996 - 01 - 01, 24);
+INSERT INTO HostedAt(TournamentID, FacilityID)
+VALUES (0000001, 0000001), 
+       (0000002, 0000002),
+       (0000003, 0000003),
+       (0000004, 0000004),
+       (0000005, 0000005);
+
+INSERT INTO Coaches(ID, CertificateName, YearsCoached)
+VALUES (010, 2),
+       (012, 3),
+       (013, 6),
+       (020, 12),
+       (021, 5);
+
+INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers)
+VALUES (000001, 0000001, 11111, 11),
+       (000002, 0000002, 22222, 15),
+       (000003, 0000003, 33333, 10),
+       (000004, 0000004, 44444, 14),
+       (000005, 0000005, 55555, 10);
+
+INSERT INTO Manages(ClubID, TeamID)
+VALUES (000001, 0000001),
+       (000002, 0000002),
+       (000003, 0000003),
+       (000004, 0000004),
+       (000005, 0000005);
+
+INSERT INTO Participate(TeamID, TournamentID)
+VALUES (000001, 0000001),
+       (000002, 0000002),
+       (000003, 0000003),
+       (000004, 0000004),
+       (000005, 0000005);
+
+INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN)
+VALUES (001,00,"Power",000001,665577),
+(002,10,"Middle",000001,556633),
+(003,16,"Setter",000003,663321),
+(004,09,"Power",000005,332244),
+(005,99,"Libero",000005,562525S);
+
+INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)
+VALUES (00000001, 1001, 5, 2, 2000),
+       (00000002, 1015, 15, 8, 500),
+       (00000003, 1022, 25, 10, 900),
+       (00000004, 1010, 30, 10, 3000),
+       (000000005, 1032, 1, 0, 100);
+
+INSERT INTO Gets(ID, CertificationID)
+VALUES (010, 55551), 
+       (012, 55552),
+       (013, 55553),
+       (020, 55554),
+       (021, 55555);
+
+INSERT INTO Teaches(TeamID, ID)
+VALUES (000001, 010),
+       (000002, 012),
+       (000003, 013),
+       (000004, 020),
+       (000005, 021);
 
