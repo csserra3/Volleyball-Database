@@ -152,18 +152,20 @@ CREATE TABLE PlayerStats
     PlayerID      Integer,
     MatchesPlayed INTEGER,
     GamesWon      INTEGER,
-    NumOfPoints   INTEGER,
+    NumofPoints   INTEGER,
     PRIMARY KEY (StatID),
     FOREIGN KEY (PlayerID) REFERENCES Players ON DELETE CASCADE
 );
 
 CREATE TABLE Gets
 (
-    ID              INTEGER,
-    CertificationID   INTEGER,
-    PRIMARY KEY (ID, CertificationID),
+    GetID           INTEGER,
+    ID        INTEGER,
+    CertificateName VARCHAR(50),
+    DateCertified   DATE,
+    PRIMARY KEY (GetID),
     FOREIGN KEY (ID) REFERENCES Members,
-    FOREIGN KEY (CertificationID) REFERENCES Certification
+    FOREIGN KEY (CertificateName) REFERENCES Certification
 );
 
 CREATE TABLE Teaches
