@@ -29,7 +29,7 @@ error_reporting(E_ALL);
 
 // Database access configuration
 $config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a0";	// change to 'a' + your student number
+$config["dbpassword"] = "a";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -44,18 +44,67 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <html>
 
 <head>
-	<title>"Volleyball Database"</title>
+	<title>CPSC 304 Volleyball Community</title>
+	<style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            color: #1e6091;
+			text-align: center;
+        }
+
+        h2 {
+            color: #1e6091;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #1e6091;
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid #1e6091;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1e6091;
+            color: #ffffff;
+        }
+		
+    </style>
 </head>
 
 <body>
-<?php
-echo "<h2>Digging Data: A Volleyball Data Hub</h2>";
-echo "<br>";
-?>
+	<h1> CPSC 304 Volleyball Community </h1>
+	<h1> <img class="volleyball-image" src="https://t4.ftcdn.net/jpg/04/18/08/23/360_F_418082327_vJjeEA2NMyk7Eg8JpdlJsC2LVMBwj7CV.jpg" alt="Volleyball Image"> </h1>
 	<h2>Reset</h2>
 	<p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
 
-	<form method="POST" action="volleyball.php">
+	<form method="POST" action="oracle-template.php">
 		<!-- "action" specifies the file or page that will receive the form data for processing. As with this example, it can be this same file. -->
 		<input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
 		<p><input type="submit" value="Reset" name="reset"></p>
@@ -64,7 +113,7 @@ echo "<br>";
 	<hr />
 
 	<h2>Insert Values into DemoTable</h2>
-	<form method="POST" action="volleyball.php">
+	<form method="POST" action="oracle-template.php">
 		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 		Number: <input type="text" name="insNo"> <br /><br />
 		Name: <input type="text" name="insName"> <br /><br />
@@ -77,7 +126,7 @@ echo "<br>";
 	<h2>Update Name in DemoTable</h2>
 	<p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
-	<form method="POST" action="volleyball.php">
+	<form method="POST" action="oracle-template.php">
 		<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
 		Old Name: <input type="text" name="oldName"> <br /><br />
 		New Name: <input type="text" name="newName"> <br /><br />
@@ -88,7 +137,7 @@ echo "<br>";
 	<hr />
 
 	<h2>Count the Tuples in DemoTable</h2>
-	<form method="GET" action="volleyball.php">
+	<form method="GET" action="oracle-template.php">
 		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
 		<input type="submit" name="countTuples"></p>
 	</form>
@@ -96,7 +145,7 @@ echo "<br>";
 	<hr />
 
 	<h2>Display Tuples in DemoTable</h2>
-	<form method="GET" action="volleyball.php">
+	<form method="GET" action="oracle-template.php">
 		<input type="hidden" id="displayTuplesRequest" name="displayTuplesRequest">
 		<input type="submit" name="displayTuples"></p>
 	</form>
