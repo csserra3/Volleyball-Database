@@ -1,20 +1,21 @@
 -- DDL
-DROP TABLE Organization;
-DROP TABLE Facility;
-DROP TABLE Tournament;
-DROP TABLE Club;
-DROP TABLE Members;
-DROP TABLE Certification;
-DROP TABLE Sponsors;
-DROP TABLE HostedAt;
-DROP TABLE Coaches;
-DROP TABLE Team;
-DROP TABLE Manages;
-DROP TABLE Participate;
-DROP TABLE Players;
-DROP TABLE PlayerStats;
-DROP TABLE Gets;
+
 DROP TABLE Teaches;
+DROP TABLE Gets;
+DROP TABLE PlayerStats;
+DROP TABLE Players;
+DROP TABLE Participate;
+DROP TABLE Manages;
+DROP TABLE Team;
+DROP TABLE Coaches;
+DROP TABLE HostedAt;
+DROP TABLE Sponsors;
+DROP TABLE Certification;
+DROP TABLE Members;
+DROP TABLE Club;
+DROP TABLE Tournament;
+DROP TABLE Facility;
+DROP TABLE Organization;
 
 
 CREATE TABLE Organization
@@ -64,7 +65,7 @@ CREATE TABLE Members
     City      VARCHAR(50),
     BirthDate DATE,
     Age       INTEGER,
-    PRIMARY KEY (MemberID)
+    PRIMARY KEY (ID)
 );
 
 CREATE TABLE Certification
@@ -87,9 +88,9 @@ CREATE TABLE Sponsors
 
 CREATE TABLE HostedAt
 (
-    TournamentID INT,
-    FacilityID INT,
-    PRIMARY KEY (TournamentID, FacilityID)
+    TournamentID INTEGER,
+    FacilityID INTEGER,
+    PRIMARY KEY (TournamentID, FacilityID),
     FOREIGN KEY (TournamentID) REFERENCES Tournament,
     FOREIGN KEY (FacilityID) REFERENCES Facility
 );
@@ -178,60 +179,60 @@ CREATE TABLE Teaches
 
 -- INSERT STATEMENTS
 INSERT INTO Organization(OrganizationID, Name, AmountSponsored)
-VALUES (0000001, 'OrganizationOne', 10000),
-       (0000002, 'OrganizationTwo', 10000),
-       (0000003, 'OrganizationThree', 20000),
-       (0000004, 'OrganizationFour', 3000),
-       (0000005, 'OrganizationFive', 5000);
+VALUES (1, 'OrganizationOne', 10000),
+       (2, 'OrganizationTwo', 10000),
+       (3, 'OrganizationThree', 20000),
+       (4, 'OrganizationFour', 3000),
+       (5, 'OrganizationFive', 5000);
 
 INSERT INTO Facility(FacilityID, FacilityName, Address, Capacity)
-VALUES (0000001, 'FacilityOne', '123 Abc St', 500),
-       (0000002, 'FacilityTwo', '19030 74 Ave', 400),
-       (0000003, 'FacilityThree', '3012 Glen Dr', 500),
-       (0000004, 'FacilityFour', '222 Smith Ave', 1000),
-       (0000005, 'FacilityFive', '123 Van St', 700);
+VALUES (1, 'FacilityOne', '123 Abc St', 500),
+       (2, 'FacilityTwo', '19030 74 Ave', 400),
+       (3, 'FacilityThree', '3012 Glen Dr', 500),
+       (4, 'FacilityFour', '222 Smith Ave', 1000),
+       (5, 'FacilityFive', '123 Van St', 700);
 
 INSERT INTO Tournament(TournamentID, Name, FacilityName, SponsorID, StartDate, EndDate)
-VALUES (0000001, 'TOne', 'FacilityOne', 0000001, 2023 - 06 - 28, 2023 - 06 - 30),
-       (0000002, 'TTwo', 'FacilityTwo', '19030 74 Ave', 0000002, 2024 - 03 - 28, 2023 - 03 - 30),
-       (0000003, 'TThree', 'FacilityThree', '3012 Glen Dr', 0000003, 2023 - 01 - 18, 2023 - 01 - 19),
-       (0000004, 'TFour', 'FacilityFour', '222 Smith Ave', 0000004, 2023 - 07 - 28, 2023 - 07 - 30),
-       (0000005, 'TFive', 'FacilityFive', '123 Van St', 0000005, 2024 - 06 - 25, 2024 - 06 - 29);
+VALUES (1, 'TOne', 'FacilityOne', 1, TO_DATE('2023-06-28', 'YYYY-MM-DD'), TO_DATE('2023-06-30', 'YYYY-MM-DD')),
+       (2, 'TTwo', 'FacilityTwo', 2, TO_DATE('2024-03-28', 'YYYY-MM-DD'), TO_DATE('2023-03-30', 'YYYY-MM-DD')),
+       (3, 'TThree', 'FacilityThree', 3, TO_DATE('2023-01-18', 'YYYY-MM-DD'), TO_DATE('2023-01-19', 'YYYY-MM-DD')),
+       (4, 'TFour', 'FacilityFour', 4, TO_DATE('2023-07-28', 'YYYY-MM-DD'), TO_DATE('2023-07-30', 'YYYY-MM-DD')),
+       (5, 'TFive', 'FacilityFive', 5, TO_DATE('2024-06-25', 'YYYY-MM-DD'), TO_DATE('2024-06-29', 'YYYY-MM-DD'));
 
 INSERT INTO Club(ClubID, Name, Location)
-VALUES (0000001, 'ClubOne', '333 Sunny Ave'),
-       (0000002, 'ClubTwo', '5034 Lock Ave'),
-       (0000003, 'ClubThree', '4102 Ocean Dr'),
-       (0000004, 'ClubFour', '3032 Bob Ave'),
-       (0000005, 'ClubFive', '553 Smith St');
+VALUES (1, 'ClubOne', '333 Sunny Ave'),
+       (2, 'ClubTwo', '5034 Lock Ave'),
+       (3, 'ClubThree', '4102 Ocean Dr'),
+       (4, 'ClubFour', '3032 Bob Ave'),
+       (5, 'ClubFive', '553 Smith St');
 
 INSERT INTO Members(ID, Name, PhoneNum, Address, City, Birthdate, Age)
-VALUES (001, 'Bob Smith', 6045555555, '123 Sunny Ave', 'Vancouver', 1996 - 01 - 01, 20),
-       (002, 'Joe David', 6045557777, '333 Flemings Ave', 'Vancouver', 1991 - 02 - 01, 19),
-       (003, 'Billy Smith', 6045555566, '555 Water Ave', 'Burnaby', 2000 - 11 - 10, 19),
-       (004, 'Sue Anderson', 6045555353, '6063 Blue Street', 'Richmond', 1996 - 01 - 01, 22),
-       (005, 'Michael Scott', 6045555151, '2323 80 Ave', 'Surrey', 1996 - 01 - 01, 24);
+VALUES (1, 'Bob Smith', 6045555555, '123 Sunny Ave', 'Vancouver', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 20),
+       (2, 'Joe David', 6045557777, '333 Flemings Ave', 'Vancouver', TO_DATE('1991-02-01', 'YYYY-MM-DD'), 19),
+       (3, 'Billy Smith', 6045555566, '555 Water Ave', 'Burnaby', TO_DATE('2000-11-10', 'YYYY-MM-DD'), 19),
+       (4, 'Sue Anderson', 6045555353, '6063 Blue Street', 'Richmond', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 22),
+       (5, 'Michael Scott', 6045555151, '2323 80 Ave', 'Surrey', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 24);
 
 INSERT INTO Certification(CertificationID, CertificateName, ExpirationDate)
-VALUES (55551, 'CertOne', 2023 - 06 - 12),
-       (55552, 'CertTwo', 2023 - 02 - 11),
-       (55553, 'CertThree', 2024 - 01 - 01),
-       (55554, 'CertFour', 2023 - 10 - 10),
-       (55555, 'CertFive', 2023 - 06 - 13);
+VALUES (55551, 'CertOne', TO_DATE('2023-06-12', 'YYYY-MM-DD')),
+       (55552, 'CertTwo', TO_DATE('2023-02-11', 'YYYY-MM-DD')),
+       (55553, 'CertThree', TO_DATE('2024-01-01', 'YYYY-MM-DD')),
+       (55554, 'CertFour', TO_DATE('2023-10-10', 'YYYY-MM-DD')),
+       (55555, 'CertFive', TO_DATE('2023-06-13', 'YYYY-MM-DD'));
 
 INSERT INTO Sponsors(OrganizationID, TournamentID, AmountSponsored)
-VALUES (0000001, 0000001, 100000),
-       (0000002, 0000002, 200000),
-       (0000003, 0000003, 300000),
-       (0000004, 0000004, 400000),
-       (0000005, 0000005, 500000);
+VALUES (1, 1, 100000),
+       (2, 2, 200000),
+       (3, 3, 300000),
+       (4, 4, 400000),
+       (5, 5, 500000);
 
 INSERT INTO HostedAt(TournamentID, FacilityID)
-VALUES (0000001, 0000001),
-       (0000002, 0000002),
-       (0000003, 0000003),
-       (0000004, 0000004),
-       (0000005, 0000005);
+VALUES (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
 
 INSERT INTO Coaches(ID, CertificateName, YearsCoached)
 VALUES (010, 2),
@@ -241,51 +242,51 @@ VALUES (010, 2),
        (021, 5);
 
 INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers)
-VALUES (000001, 0000001, 11111, 11),
-       (000002, 0000002, 22222, 15),
-       (000003, 0000003, 33333, 10),
-       (000004, 0000004, 44444, 14),
-       (000005, 0000005, 55555, 10);
+VALUES (1, 1, 11111, 11),
+       (2, 2, 22222, 15),
+       (3, 3, 33333, 10),
+       (4, 4, 44444, 14),
+       (5, 5, 55555, 10);
 
 INSERT INTO Manages(ClubID, TeamID)
-VALUES (000001, 0000001),
-       (000002, 0000002),
-       (000003, 0000003),
-       (000004, 0000004),
-       (000005, 0000005);
+VALUES (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
 
 INSERT INTO Participate(TeamID, TournamentID)
-VALUES (000001, 0000001),
-       (000002, 0000002),
-       (000003, 0000003),
-       (000004, 0000004),
-       (000005, 0000005);
+VALUES (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
 
 INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN)
-VALUES (001,00,"Power",000001,665577),
-       (002,10,"Middle",000001,556633),
-       (003,16,"Setter",000003,663321),
-       (004,09,"Power",000005,332244),
-       (005,99,"Libero",000005,562525S);
+VALUES (1,0,"Power",1,665577),
+       (2,10,"Middle",1,556633),
+       (3,16,"Setter",3,663321),
+       (4,9,"Power",5,332244),
+       (5,99,"Libero",5,562525);
 
 INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)
-VALUES (00000001, 1001, 5, 2, 2000),
-       (00000002, 1015, 15, 8, 500),
-       (00000003, 1022, 25, 10, 900),
-       (00000004, 1010, 30, 10, 3000),
-       (000000005, 1032, 1, 0, 100);
+VALUES (1, 1001, 5, 2, 2000),
+       (2, 1015, 15, 8, 500),
+       (3, 1022, 25, 10, 900),
+       (4, 1010, 30, 10, 3000),
+       (5, 1032, 1, 0, 100);
 
 INSERT INTO Gets(ID, CertificationID)
-VALUES (010, 55551),
-       (012, 55552),
-       (013, 55553),
-       (020, 55554),
-       (021, 55555);
+VALUES (10, 55551),
+       (12, 55552),
+       (13, 55553),
+       (20, 55554),
+       (21, 55555);
 
 INSERT INTO Teaches(TeamID, ID)
-VALUES (000001, 010),
-       (000002, 012),
-       (000003, 013),
-       (000004, 020),
-       (000005, 021);
+VALUES (1, 10),
+       (2, 12),
+       (3, 13),
+       (4, 20),
+       (5, 21);
 
