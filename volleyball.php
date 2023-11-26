@@ -28,8 +28,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_ericzubc";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a13115150";	// change to 'a' + your student number
+$config["dbuser"] = "ora_varneega";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a84819218";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -112,6 +112,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	<hr />
 
+
+	<!-- JOIN: Members & Players table, search by PlayerID -->
+	<h2> JOIN query </h2>
+	<form method="GET" action="volleyball.php">
+		<input type="hidden" id="joinRequest" name="joinRequest">
+		Player ID: <input type="text" name="playerID"> <br /><br />
+
+		<input type="submit" name="join"></p>
+	</form>
+
+	<hr />
+
 	<h2>Insert Values into DemoTable</h2>
 	<form method="POST" action="volleyball.php">
 		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
@@ -122,6 +134,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	</form>
 
 	<hr />
+
+
 
 	<h2>Update Name in DemoTable</h2>
 	<p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
@@ -327,6 +341,53 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		printResult($result);
 	}
 
+	function handleJoinRequest()
+	{
+
+		global $db_conn;
+		$playerID = $_GET['playerID'];
+
+		$sql = "SELECT P.ID, P.JerseyNum, P.Position, P.TeamID, PS.StatID, PS.MatchesPlayed, PS.GamesWon, PS.NumofPoints
+				FROM Players P, PlayerStats PS
+				WHERE P.ID = PS.PlayerID
+					AND P.ID = '" . $_GET['playerID'] . "'";
+
+		// echo "SQL Query: $sql<br>";
+		// var_dump($sql); 
+
+		$result = executePlainSQL($sql);
+		// var_dump($result);
+
+		// printResult($result);
+		echo "<br>Retrieved data from the join query:<br>";
+		echo "<table border='1'>";
+		echo "<tr><th>ID</th><th>JerseyNum</th><th>Position</th><th>TeamID</th><th>StatID</th><th>MatchesPlayed</th><th>GamesWon</th><th>NumofPoints</th></tr>";
+
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+
+			if ($row === false) {
+				$e = oci_error($result);
+				echo "Error fetching data: " . htmlentities($e['message']);
+				break;
+			}
+
+			// vardump($row);
+			echo "<tr>";
+			echo "<td>" . $row[0] . "</td>";
+			echo "<td>" . $row[1] . "</td>";
+			echo "<td>" . $row[2] . "</td>";
+			echo "<td>" . $row[3] . "</td>";
+			echo "<td>" . $row[4] . "</td>";
+			echo "<td>" . $row[5] . "</td>";
+			echo "<td>" . $row[6] . "</td>";
+			echo "<td>" . $row[7] . "</td>";
+			echo "</tr>";
+		}
+	
+		echo "</table>";
+
+	}
+
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handlePOSTRequest()
@@ -353,15 +414,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				handleCountRequest();
 			} elseif (array_key_exists('displayTuples', $_GET)) {
 				handleDisplayRequest();
+			} elseif (array_key_exists('join', $_GET)) {
+				handleJoinRequest();
 			}
 
 			disconnectFromDB();
 		}
 	}
 
+	// isset($_GET['joinRequest'])
 	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest'])) {
+	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest'])) {
 		handleGETRequest();
 	}
 
