@@ -7,7 +7,6 @@
   Specifically, it will drop a table, create a table, insert values update
   values, and then query for values
   IF YOU HAVE A TABLE CALLED "demoTable" IT WILL BE DESTROYED
-
   The script assumes you already have a server set up All OCI commands are
   commands to the Oracle libraries. To get the file to work, you must place it
   somewhere where your Apache server can run it, and you must rename it to have
@@ -113,7 +112,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<hr />
 
 
-	<!-- JOIN: Players & PlayerStats table, search by PlayerID -->
+	<!-- JOIN: Members & Players table, search by PlayerID -->
 	<h2> JOIN query </h2>
 	<form method="GET" action="volleyball.php">
 		<input type="hidden" id="joinRequest" name="joinRequest">
@@ -134,8 +133,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	</form>
 
 	<hr />
-
-
 
 
 
@@ -390,53 +387,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	}
 
-	function handleJoinRequest()
-	{
-
-		global $db_conn;
-		$playerID = $_GET['playerID'];
-
-		$sql = "SELECT P.ID, P.JerseyNum, P.Position, P.TeamID, PS.StatID, PS.MatchesPlayed, PS.GamesWon, PS.NumofPoints
-				FROM Players P, PlayerStats PS
-				WHERE P.ID = PS.PlayerID
-					AND P.ID = '" . $_GET['playerID'] . "'";
-
-		// echo "SQL Query: $sql<br>";
-		// var_dump($sql); 
-
-		$result = executePlainSQL($sql);
-		// var_dump($result);
-
-		// printResult($result);
-		echo "<br>Retrieved data from the join query:<br>";
-		echo "<table border='1'>";
-		echo "<tr><th>ID</th><th>JerseyNum</th><th>Position</th><th>TeamID</th><th>StatID</th><th>MatchesPlayed</th><th>GamesWon</th><th>NumofPoints</th></tr>";
-
-		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-
-			if ($row === false) {
-				$e = oci_error($result);
-				echo "Error fetching data: " . htmlentities($e['message']);
-				break;
-			}
-
-			// vardump($row);
-			echo "<tr>";
-			echo "<td>" . $row[0] . "</td>";
-			echo "<td>" . $row[1] . "</td>";
-			echo "<td>" . $row[2] . "</td>";
-			echo "<td>" . $row[3] . "</td>";
-			echo "<td>" . $row[4] . "</td>";
-			echo "<td>" . $row[5] . "</td>";
-			echo "<td>" . $row[6] . "</td>";
-			echo "<td>" . $row[7] . "</td>";
-			echo "</tr>";
-		}
-	
-		echo "</table>";
-
-	}
-
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handlePOSTRequest()
@@ -472,10 +422,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	}
 
 	// isset($_GET['joinRequest'])
-	// isset($_GET['joinRequest'])
 	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest'])) {
 	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest'])) {
 		handleGETRequest();
 	}
