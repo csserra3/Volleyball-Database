@@ -113,7 +113,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<hr />
 
 
-	<!-- JOIN: Members & Players table, search by PlayerID -->
+	<!-- JOIN: Players & PlayerStats table, search by PlayerID -->
 	<h2> JOIN query </h2>
 	<form method="GET" action="volleyball.php">
 		<input type="hidden" id="joinRequest" name="joinRequest">
@@ -134,6 +134,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	</form>
 
 	<hr />
+
+
 
 
 
@@ -463,8 +465,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				handleDisplayRequest();
 			} elseif (array_key_exists('join', $_GET)) {
 				handleJoinRequest();
-			} elseif (array_key_exists('join', $_GET)) {
-				handleJoinRequest();
 			}
 
 			disconnectFromDB();
@@ -472,8 +472,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	}
 
 	// isset($_GET['joinRequest'])
+	// isset($_GET['joinRequest'])
 	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 		handlePOSTRequest();
+	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest'])) {
 	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest'])) {
 		handleGETRequest();
 	}
