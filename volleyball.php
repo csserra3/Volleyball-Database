@@ -126,10 +126,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <!-- SELECTION: Members from Vancouver-->
     <h2> SELECTION </h2>
-    <p>Find the name and birthdate of members residing in city:
-        <input type="text" name="city"></p>
+    <p>Find the name and birthdate of members residing in</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="selectionRequest" name="selectionRequest">
+        city: <input type="text" name="city"> <br /><br />
         <input type="submit" name="selection"></p>
     </form>
 
