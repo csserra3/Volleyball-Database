@@ -143,7 +143,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     </form>
     <!-- AGGREGATION W HAVING: -->
     <h2> AGGREGATION WITH HAVING </h2>
-    <p>Find -</p>
+    <p>Find organizations that have an average sponsorship amount > $200K for tournaments</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="AggHRequest" name="AggHRequest">
         <input type="submit" name="AggH"></p>
@@ -466,7 +466,31 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     function handleAggregation_HRequest()
     {
+        global $db_conn;
 
+        $sql = "SELECT o.OrganizationID, o.Name, AVG(s.AmountSponsored) AS AverageSponsorship
+                FROM Organization o
+                JOIN Sponsors s ON o.OrganizationID = s.OrganizationID
+                GROUP BY o.OrganizationID, o.Name
+                HAVING AVG(s.AmountSponsored) > 200000";
+        $result = executePlainSQL($sql);
+
+        echo "<br>Retrieved data from AGGREGATION (H) query:<br>";
+        echo "<table border='1'>";
+        echo "<tr>
+              <th>OrganizationID</th>
+              <th>Name</th>
+              <th>AverageSponsorship</th>
+              </tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "<tr>";
+            echo "<td>" . $row[0] . "</td>";
+            echo "<td>" . $row[1] . "</td>";
+            echo "<td>" . $row[2] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
     }
 
 	// HANDLE ALL POST ROUTES
@@ -501,6 +525,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                 handleSelectionRequest();
             } elseif (array_key_exists('AggGB', $_GET)) {
                 handleAggregation_GBRequest();
+            } elseif (array_key_exists('AggH', $_GET)) {
+                handleAggregation_HRequest();
             }
 
 			disconnectFromDB();
@@ -514,7 +540,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		handleGETRequest();
 	} else if (isset($_GET['selectionRequest'])) {
         handleGETRequest();
-    } else if (isset($_GET['AggGBRequest'])) {
+    } else if (isset($_GET['AggGBRequest']) || isset($_GET['AggHRequest']) ) {
         handleGETRequest();
     }
 
