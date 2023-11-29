@@ -27,8 +27,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_varneega";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a84819218";	// change to 'a' + your student number
+$config["dbuser"] = "ora_cserra";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a31507149";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -122,6 +122,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	</form>
 
 	<hr />
+
+    <!-- SELECTION: Members from Vancouver-->
+    <h2> SELECTION query </h2>
+    <form method="GET" action="volleyball.php">
+        <input type="hidden" id="selectionRequest" name="selectionRequest">
+        City: <input type="text" name="city"> <br /><br />
+
+        <input type="submit" name="selection"></p>
+    </form>
+
+    <hr />
 
 	<h2>Insert Values into DemoTable</h2>
 	<form method="POST" action="volleyball.php">
@@ -344,6 +355,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	{
 
 		global $db_conn;
+        connectToDB();
 		$playerID = $_GET['playerID'];
 
 		$sql = "SELECT P.ID, P.JerseyNum, P.Position, P.TeamID, PS.StatID, PS.MatchesPlayed, PS.GamesWon, PS.NumofPoints
@@ -387,6 +399,31 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	}
 
+    function handleSelectionRequest()
+    {
+        global $db_conn;
+
+        $sql = "SELECT Name, BirthDate
+        FROM Members
+        WHERE City = '" . $_GET['city'] . "'";
+        $result = executePlainSQL($sql);
+
+        echo "<br>Retrieved data from SELECTION query:<br>";
+        echo "<table border='1'>";
+        echo "<tr>
+              <th>Name</th>
+              <th>BirthDate</th>
+              </tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "<tr>";
+            echo "<td>" . $row[0] . "</td>";
+            echo "<td>" . $row[1] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+    }
+
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handlePOSTRequest()
@@ -415,7 +452,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				handleDisplayRequest();
 			} elseif (array_key_exists('join', $_GET)) {
 				handleJoinRequest();
-			}
+			} elseif (array_key_exists('selection', $_GET)) {
+                handleSelectionRequest();
+            }
 
 			disconnectFromDB();
 		}
@@ -426,7 +465,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		handlePOSTRequest();
 	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest'])) {
 		handleGETRequest();
-	}
+	} else if (isset($_GET['selectionRequest'])) {
+        handleGETRequest();
+    }
 
 	// End PHP parsing and send the rest of the HTML content
 	?>
