@@ -125,11 +125,29 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <!-- SELECTION: Members from Vancouver-->
     <h2> SELECTION query </h2>
+    <p>Find the name and birthdate of members residing in a city</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="selectionRequest" name="selectionRequest">
         City: <input type="text" name="city"> <br /><br />
 
         <input type="submit" name="selection"></p>
+    </form>
+
+    <hr />
+
+    <!-- AGGREGATION W GROUP BY: -->
+    <h2> AGGREGATION WITH GROUP BY query </h2>
+    <p>Find the number of players in each team </p>
+    <form method="GET" action="volleyball.php">
+        <input type="hidden" id="AggGBRequest" name="AggGBRequest">
+        <input type="submit" name="AggGB"></p>
+    </form>
+    <!-- AGGREGATION W HAVING: -->
+    <h2> AGGREGATION WITH HAVING query </h2>
+    <p>Find the age of the youngest player (at least 18) for each team with at least two such players </p>
+    <form method="GET" action="volleyball.php">
+        <input type="hidden" id="AggHRequest" name="AggHRequest">
+        <input type="submit" name="AggH"></p>
     </form>
 
     <hr />
@@ -396,7 +414,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	
 		echo "</table>";
-
 	}
 
     function handleSelectionRequest()
@@ -413,6 +430,31 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         echo "<tr>
               <th>Name</th>
               <th>BirthDate</th>
+              </tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "<tr>";
+            echo "<td>" . $row[0] . "</td>";
+            echo "<td>" . $row[1] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+    }
+
+    function handleAggregation_GBRequest()
+    {
+        global $db_conn;
+
+        $sql = "SELECT TeamID, COUNT(*) AS NumPlayers 
+                FROM Players 
+                GROUP BY TeamID";
+        $result = executePlainSQL($sql);
+
+        echo "<br>Retrieved data from AGGREGATION (GB) query:<br>";
+        echo "<table border='1'>";
+        echo "<tr>
+              <th>TeamID</th>
+              <th>NumPlayers</th>
               </tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
@@ -454,6 +496,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				handleJoinRequest();
 			} elseif (array_key_exists('selection', $_GET)) {
                 handleSelectionRequest();
+            } elseif (array_key_exists('AggGB', $_GET)) {
+                handleAggregation_GBRequest();
             }
 
 			disconnectFromDB();
@@ -466,6 +510,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest'])) {
 		handleGETRequest();
 	} else if (isset($_GET['selectionRequest'])) {
+        handleGETRequest();
+    } else if (isset($_GET['AggGBRequest'])) {
         handleGETRequest();
     }
 
