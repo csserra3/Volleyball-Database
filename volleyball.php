@@ -43,7 +43,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <html>
 
 <head>
-	<title>CPSC 304 Volleyball Community</title>
+	<title>CPSC 304 Volleyball Database</title>
 	<style>
         body {
             background-color: #ffffff;
@@ -98,10 +98,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </head>
 
 <body>
-	<h1> CPSC 304 Volleyball Community </h1>
-	<h1> <img class="volleyball-image" src="https://t4.ftcdn.net/jpg/04/18/08/23/360_F_418082327_vJjeEA2NMyk7Eg8JpdlJsC2LVMBwj7CV.jpg" alt="Volleyball Image"> </h1>
+	<h1> CPSC 304 Volleyball Database </h1>
+	<h1> <img class="volleyball-image" src="https://t4.ftcdn.net/jpg/04/18/08/23/360_F_418082327_vJjeEA2NMyk7Eg8JpdlJsC2LVMBwj7CV.jpg"
+              alt="Volleyball Image" width="400" height="400"> </h1>
 	<h2>Reset</h2>
-	<p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+	<p>Press the reset button to reset the table. If this is the first time you're running this page, you MUST use reset</p>
 
 	<form method="POST" action="volleyball.php">
 		<!-- "action" specifies the file or page that will receive the form data for processing. As with this example, it can be this same file. -->
@@ -125,10 +126,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <!-- SELECTION: Members from Vancouver-->
     <h2> SELECTION </h2>
-    <p>Find the name and birthdate of members residing in</p>
+    <p>Find the name and birthdate of members residing in city:
+        <input type="text" name="city"></p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="selectionRequest" name="selectionRequest">
-        city: <input type="text" name="city"> <br /><br />
         <input type="submit" name="selection"></p>
     </form>
 
@@ -136,28 +137,27 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <!-- AGGREGATION W GROUP BY: -->
     <h2> AGGREGATION WITH GROUP BY </h2>
-    <p>Find the number of players in each team </p>
+    <p>Find the number of players in each team in our database</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="AggGBRequest" name="AggGBRequest">
         <input type="submit" name="AggGB"></p>
     </form>
     <!-- AGGREGATION W HAVING: -->
     <h2> AGGREGATION WITH HAVING </h2>
-    <p>Find organizations that have an average sponsorship amount > $200K for tournaments</p>
+    <p>Find the list of organizations with an average sponsorship amount of $200K+ for tournaments</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="AggHRequest" name="AggHRequest">
         <input type="submit" name="AggH"></p>
     </form>
-
     <hr />
 
 	<h2>Insert Values into DemoTable</h2>
 	<form method="POST" action="volleyball.php">
 		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-		Number: <input type="text" name="insNo"> <br /><br />
+		Number: <input type="text" name="insNo" style="margin-right: 10px;">
 		Name: <input type="text" name="insName"> <br /><br />
 
-		<input type="submit" value="Insert" name="insertSubmit"></p>
+        <input type="submit" value="Insert" name="insertSubmit"></p>
 	</form>
 
 	<hr />
