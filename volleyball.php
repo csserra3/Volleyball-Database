@@ -124,27 +124,26 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<hr />
 
     <!-- SELECTION: Members from Vancouver-->
-    <h2> SELECTION query </h2>
-    <p>Find the name and birthdate of members residing in a city</p>
+    <h2> SELECTION </h2>
+    <p>Find the name and birthdate of members residing in</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="selectionRequest" name="selectionRequest">
-        City: <input type="text" name="city"> <br /><br />
-
+        city: <input type="text" name="city"> <br /><br />
         <input type="submit" name="selection"></p>
     </form>
 
     <hr />
 
     <!-- AGGREGATION W GROUP BY: -->
-    <h2> AGGREGATION WITH GROUP BY query </h2>
+    <h2> AGGREGATION WITH GROUP BY </h2>
     <p>Find the number of players in each team </p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="AggGBRequest" name="AggGBRequest">
         <input type="submit" name="AggGB"></p>
     </form>
     <!-- AGGREGATION W HAVING: -->
-    <h2> AGGREGATION WITH HAVING query </h2>
-    <p>Find the age of the youngest player (at least 18) for each team with at least two such players </p>
+    <h2> AGGREGATION WITH HAVING </h2>
+    <p>Find -</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="AggHRequest" name="AggHRequest">
         <input type="submit" name="AggH"></p>
@@ -162,7 +161,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	</form>
 
 	<hr />
-
 
 
 	<h2>Update Name in DemoTable</h2>
@@ -464,6 +462,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             echo "</tr>";
         }
         echo "</table>";
+    }
+
+    function handleAggregation_HRequest()
+    {
+
     }
 
 	// HANDLE ALL POST ROUTES
