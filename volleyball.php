@@ -133,6 +133,31 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	<hr />
 
+
+	<!-- PROJECTION -->
+	<h2>Search Here!</h2>
+	<form method="GET" action="volleyball.php">
+		<label for="selectedTable">Select a table:</label>
+		<select id="selectedTable" name="selectedTable">
+			<?php
+			
+			// Connect to the db on page reload
+			connectToDB();
+			$tableNames = fetchTableNames();
+
+			// Display the fetched table names
+			foreach ($tableNames as $tableName) {
+				echo "<option value=\"$tableName\">$tableName</option>";
+			}
+			?>
+		</select>
+		Attributes to search for (comma separated): <input type="text" name="attributeSearch"> <br /><br />
+		<br><br>
+		<input type="submit" name="displayTableSubmit" value="Search">
+	</form>
+
+	<hr />
+
     <!-- SELECTION: Members from Vancouver-->
     <h2> SELECTION </h2>
     <p>Find the name and birthdate of members residing in</p>
@@ -316,6 +341,21 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_close($db_conn);
 	}
 
+	function fetchTableNames()
+	{
+		global $db_conn;
+	
+		$query = "SELECT table_name FROM user_tables";
+		$result = executePlainSQL($query);
+	
+		$tableNames = array();
+		while ($row = oci_fetch_assoc($result)) {
+			$tableNames[] = $row['TABLE_NAME'];
+		}
+	
+		return $tableNames;
+	}
+
 	function handleUpdateRequest()
 	{
 		global $db_conn;
@@ -454,6 +494,85 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
+	
+	function handleSearchRequest() {
+		global $db_conn;
+
+		// Retrieve user input
+		$tableName = $_GET['selectedTable'];
+		$attributeSearchList = $_GET['attributeSearch'];
+
+		// Validate input format (numerical values separated by commas)
+		if (!preg_match('/^(\d+,)*\d+$/', $attributeSearchList)) {
+			echo "Error: Invalid input format. Please enter numerical values separated by commas.";
+			return;
+		}
+
+
+		$columnNumbers = explode(',', $attributeSearchList);
+	
+		// Query to get all column names of the selected table
+		$sqlTemplate = "SELECT column_name FROM USER_TAB_COLUMNS WHERE table_name = '$tableName'";
+		$result = executePlainSQL($sqlTemplate);
+	
+		// Declare an empty array to store db fetched column names
+		$allColumnNames = array();
+		while ($row = OCI_fetch_array($result, OCI_BOTH)) {
+			$allColumnNames[] = $row[0];
+		}
+
+		// Error handling for out of bounds column
+		foreach($columnNumbers as $columnNumber) {
+			if ($columnNumber > (count($allColumnNames) - 1)) {
+				echo "Error: Invalid input format. Please enter numerical values separated by commas.";
+				return;
+			}
+		}
+
+		// Filtered column names based on user input
+		$filteredColumnNames = array();
+		foreach ($columnNumbers as $columnNumber) {
+			if (isset($allColumnNames[$columnNumber])) {
+				$filteredColumnNames[] = $allColumnNames[$columnNumber];
+			}
+		}
+	
+		// Construct the SQL query with the selected columns
+		$selectedColumns = implode(', ', $filteredColumnNames);
+		$sql = "SELECT $selectedColumns FROM $tableName";
+	
+		// Execute the query
+		$result = executePlainSQL($sql);
+	
+		echo "<br>Search results from $tableName with Selected Columns:<br>";
+		echo "<table border='1'>";
+		echo "<tr>";
+
+
+		// Display column headers
+		foreach ($filteredColumnNames as $filteredColumnName) {
+			echo "<th>$filteredColumnName</th>";
+		}
+		echo "</tr>";
+	
+
+		// Display query results
+		while ($row = OCI_fetch_array($result, OCI_BOTH)) {
+			echo "<tr>";
+			for ($i = 0; $i < sizeof($filteredColumnNames); $i++) {
+				if (isset($row[$i])) {
+					echo "<td>" . $row[$i] . "</td>";
+				}
+				else {
+					echo "<td>Not available</td>";
+				}
+			}
+			echo "</tr>";
+		}
+	
+		echo "</table>";
+	}
+
     function handleSelectionRequest()
     {
         global $db_conn;
@@ -563,6 +682,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				handleJoinRequest();
 			} elseif (array_key_exists('avgSponsorship', $_GET)) {
 				handleAvgSponsorshipRequest();
+			} elseif (array_key_exists('displayTableSubmit', $_GET)) {
+				handleSearchRequest();
 			} elseif (array_key_exists('selection', $_GET)) {
                 handleSelectionRequest();
             } elseif (array_key_exists('AggGB', $_GET)) {
@@ -578,7 +699,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	// isset($_GET['joinRequest'])
 	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest']) || isset($_GET['avgSponsorshipRequest'])) {
+	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest']) || isset($_GET['avgSponsorshipRequest']) || (isset($_GET['selectedTable']) && isset($_GET['attributeSearch']))) {
 		handleGETRequest();
 	} else if (isset($_GET['selectionRequest'])) {
         handleGETRequest();
