@@ -124,6 +124,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	<hr />
 
+	<!-- NESTED AGG W/ GROUP BY: Average sponsorship amount per tournament -->
+	<h2> Tournament Showcase: Average Sponsorship Insights </h2>
+	<form method="GET" action="volleyball.php">
+		<input type="hidden" id="avgSponsorshipRequest" name="avgSponsorshipRequest">
+		<input type="submit" name="avgSponsorship"></p>
+	</form>
+
+	<hr />
+
     <!-- SELECTION: Members from Vancouver-->
     <h2> SELECTION </h2>
     <p>Find the name and birthdate of members residing in</p>
@@ -414,6 +423,37 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "</table>";
 	}
 
+	function handleAvgSponsorshipRequest() {
+		global $db_conn;
+	
+		$sql = "SELECT t.Name AS TournamentName, AVG(ts.AmountSponsored) AS AvgSponsorship FROM 
+					(SELECT s.TournamentID, o.AmountSponsored 
+					FROM Sponsors s 
+					JOIN Organization o 
+					ON s.OrganizationID = o.OrganizationID) ts JOIN Tournament t ON ts.TournamentID = t.TournamentID GROUP BY t.Name, t.TournamentID ORDER BY t.TournamentID";
+	
+	
+		$result = executePlainSQL($sql);
+		if (!$result) {
+			$e = OCI_Error($db_conn);
+			echo "Error executing query: " . htmlentities($e['message']);
+		}
+		else {
+		echo "<br>Tournaments & Average Sponsorships:<br>";
+		echo "<table border='1'>";
+		echo "<tr><th>Tournament</th><th>Average Sponsorship Amount Received</th></tr>";
+		// echo($result);
+		while ($row = OCI_fetch_array($result, OCI_NUM)) {
+			// echo($row[1]);
+			echo "<tr>";
+			echo "<td>" . $row[0] . "</td>";
+			echo "<td>$" . $row[1] . "</td>";
+			echo "</tr>";
+		}
+		echo "</table>";
+		}
+	}
+
     function handleSelectionRequest()
     {
         global $db_conn;
@@ -521,6 +561,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				handleDisplayRequest();
 			} elseif (array_key_exists('join', $_GET)) {
 				handleJoinRequest();
+			} elseif (array_key_exists('avgSponsorship', $_GET)) {
+				handleAvgSponsorshipRequest();
 			} elseif (array_key_exists('selection', $_GET)) {
                 handleSelectionRequest();
             } elseif (array_key_exists('AggGB', $_GET)) {
@@ -536,7 +578,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	// isset($_GET['joinRequest'])
 	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest'])) {
+	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest']) || isset($_GET['avgSponsorshipRequest'])) {
 		handleGETRequest();
 	} else if (isset($_GET['selectionRequest'])) {
         handleGETRequest();
