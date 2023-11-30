@@ -114,7 +114,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 
 	<!-- JOIN: Members & Players table, search by PlayerID -->
-	<h2> JOIN query </h2>
+	<h2> JOIN</h2>
 	<form method="GET" action="volleyball.php">
 		<input type="hidden" id="joinRequest" name="joinRequest">
 		Player ID: <input type="text" name="playerID"> <br /><br />
