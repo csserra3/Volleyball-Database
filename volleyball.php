@@ -586,12 +586,22 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     {
         global $db_conn;
 
+        $city = $_GET['city'];
+        if (!preg_match('/^[a-zA-Z]+$/', $city)) {
+            echo "ERROR: Invalid input format. Please enter a valid city name.";
+            return;
+        }
+
         $sql = "SELECT Name, BirthDate
         FROM Members
-        WHERE City = '" . $_GET['city'] . "'";
+        WHERE UPPER(City) = UPPER('" . $city . "')";
         $result = executePlainSQL($sql);
 
         echo "<br>Retrieved data from SELECTION query:<br>";
+        if(oci_fetch_assoc($result)===false) {
+            echo "No results for the specified city";
+            return;
+        }
         echo "<table border='1'>";
         echo "<tr>
               <th>Name</th>
