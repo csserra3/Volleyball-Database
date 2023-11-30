@@ -423,18 +423,27 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         connectToDB();
 		$playerID = $_GET['playerID'];
 
+		// Validate that the input is a numeric value
+		if (!is_numeric($playerID)) {
+			echo "Error: PlayerID must be a numeric value.";
+			return;
+		}
+
 		$sql = "SELECT P.ID, P.JerseyNum, P.Position, P.TeamID, PS.StatID, PS.MatchesPlayed, PS.GamesWon, PS.NumofPoints
 				FROM Players P, PlayerStats PS
 				WHERE P.ID = PS.PlayerID
 					AND P.ID = '" . $_GET['playerID'] . "'";
 
-		// echo "SQL Query: $sql<br>";
-		// var_dump($sql); 
+
 
 		$result = executePlainSQL($sql);
-		// var_dump($result);
 
-		// printResult($result);
+		// Check if the result set is empty
+		if (oci_fetch_assoc($result) === false) {
+			echo "Error: PlayerID not found in the database.";
+			return;
+		}
+
 		echo "<br>Retrieved data from the join query:<br>";
 		echo "<table border='1'>";
 		echo "<tr><th>ID</th><th>JerseyNum</th><th>Position</th><th>TeamID</th><th>StatID</th><th>MatchesPlayed</th><th>GamesWon</th><th>NumofPoints</th></tr>";
@@ -494,7 +503,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-	
+
 	function handleSearchRequest() {
 		global $db_conn;
 
