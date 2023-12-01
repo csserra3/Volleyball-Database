@@ -438,17 +438,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		$result = executePlainSQL($sql);
 
-		// Check if the result set is empty
-		if (oci_fetch_assoc($result) === false) {
-			echo "Error: PlayerID not found in the database.";
-			return;
-		}
-
 		echo "<br>Retrieved data from the join query:<br>";
 		echo "<table border='1'>";
 		echo "<tr><th>ID</th><th>JerseyNum</th><th>Position</th><th>TeamID</th><th>StatID</th><th>MatchesPlayed</th><th>GamesWon</th><th>NumofPoints</th></tr>";
-
-		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		
+		while ($row = OCI_fetch_array($result, OCI_NUM)) {
 
 			if ($row === false) {
 				$e = oci_error($result);
@@ -456,7 +450,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				break;
 			}
 
-			// vardump($row);
 			echo "<tr>";
 			echo "<td>" . $row[0] . "</td>";
 			echo "<td>" . $row[1] . "</td>";
@@ -468,7 +461,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			echo "<td>" . $row[7] . "</td>";
 			echo "</tr>";
 		}
-	
 		echo "</table>";
 	}
 
