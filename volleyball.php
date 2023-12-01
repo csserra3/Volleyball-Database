@@ -27,8 +27,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_cserra";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a31507149";	// change to 'a' + your student number
+$config["dbuser"] = "ora_ericzubc";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a13115150";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -101,17 +101,106 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<h1> CPSC 304 Volleyball Database </h1>
 	<h1> <img class="volleyball-image" src="https://t4.ftcdn.net/jpg/04/18/08/23/360_F_418082327_vJjeEA2NMyk7Eg8JpdlJsC2LVMBwj7CV.jpg"
               alt="Volleyball Image" width="400" height="400"> </h1>
-	<h2>Reset</h2>
-	<p>Press the reset button to reset the table. If this is the first time you're running this page, you MUST use reset</p>
+    <hr />
 
-	<form method="POST" action="volleyball.php">
-		<!-- "action" specifies the file or page that will receive the form data for processing. As with this example, it can be this same file. -->
-		<input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
-		<p><input type="submit" value="Reset" name="reset"></p>
-	</form>
+    <h2>Please register as a member below!</h2>
+        <form method="POST" action="volleyball.php">
+             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 
-	<hr />
+             Name: <input type="text" name="name"> <br /><br />
+             Phone Number: <input type="number" name="phoneNum"> <br /><br />
+             Address: <input type="text" name="address"> <br /><br />
+             City: <input type="text" name="city"> <br /><br />
+             Birthday (yyyy-mm-dd): <input type="text" name="birthday"> <br /><br />
+             Age: <input type="number" name="age"> <br /><br />
 
+             <input type="submit" value="Register" name="insertRegisterMember"></p>
+        </form>
+
+        <?php
+            if (isset($_POST['insertQueryRequest'])) {
+                    handlePOSTRequest();
+            }
+        ?>
+
+        <hr />
+
+        <h2>If you are a coach, please use your membership ID generated above to register!</h2>
+        <form method="POST" action="volleyball.php">
+        <input type="hidden" id="insertQueryRequestCoach" name="insertQueryRequestCoach">
+
+            Member ID: <input type="number" name="memberID"> <br /><br />
+            Number of Years Coached: <input type="number" name="yearsCoached"> <br /><br />
+
+        <input type="submit" value="Register" name="insertRegisterCoach"></p>
+        </form>
+
+         <?php
+               if (isset($_POST['insertQueryRequestCoach'])){
+                   handlePOSTRequest();
+               }
+           ?>
+         <hr />
+
+        <h2>Update Player Stats</h2>
+
+        <form method="POST" action="volleyball.php">
+            <input type="hidden" id="updateStatsRequest" name="updateStatsRequest">
+
+            What do you want to update?:
+            <select name="selectedColumn">
+                <option value="PlayerID">Player ID</option>
+                <option value="MatchesPlayed">Matches Played</option>
+                <option value="GamesWon">Games Won</option>
+                <option value="NumberofPoints">Number of Points</option>
+            </select>
+            <br /><br />
+
+            Player ID: <input type="number" name="playerID"> <br /><br />
+            New Value: <input type="number" name="newValue"> <br /><br />
+
+            <input type="submit" value="Update" name="updateStats"></p>
+        </form>
+
+        <?php
+            if (isset($_POST['updateStats'])){
+                handlePOSTRequest();
+            }
+        ?>
+
+        <hr />
+
+        <h2>Remove a player on your team here!</h2>
+
+            <form method="POST" action="volleyball.php">
+                <input type="hidden" id="deletePlayerRequest" name="deletePlayerRequest">
+                Your Team ID: <input type="number" name="teamID"> <br /><br />
+                Player ID: <input type="number" name="playerID"> <br /><br />
+
+                <input type="submit" value="Remove" name="removePlayer"></p>
+            </form>
+
+            <?php
+                if (isset($_POST['removePlayer'])){
+                    handlePOSTRequest();
+                }
+            ?>
+
+            <hr />
+
+            <h2>Check player stats</h2>
+                <form method="GET" action="volleyball.php">
+                    <input type="hidden" id="displayPlayerStatRequest" name="displayPlayerStatRequest">
+                    <input type="submit" value="Check Stats" name="checkPlayerStats"></p>
+                </form>
+
+                <?php
+                   if (isset($_GET['displayPlayerStatRequest'])){
+                       handleGETRequest();
+                   }
+                ?>
+
+                <hr />
 
 	<!-- JOIN: Members & Players table, search by PlayerID -->
 	<h2> Checkout some player stats! </h2>
@@ -185,45 +274,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     </form>
     <hr />
 
-	<h2>Insert Values into DemoTable</h2>
-	<form method="POST" action="volleyball.php">
-		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-		Number: <input type="text" name="insNo" style="margin-right: 10px;">
-		Name: <input type="text" name="insName"> <br /><br />
+    <h2>Click to check which tournament every club participates</h2>
+             <form method="GET" action="volleyball.php">
+             <input type="hidden" id="displayTournamentRequest" name="displayTournamentRequest">
+             <input type="submit" name="displayTournament"></p>
+             </form>
 
-        <input type="submit" value="Insert" name="insertSubmit"></p>
-	</form>
+            <?php
+                if (isset($_GET['displayTournamentRequest'])){
+                    handleGETRequest();
+                }
+            ?>
 
-	<hr />
-
-
-	<h2>Update Name in DemoTable</h2>
-	<p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-
-	<form method="POST" action="volleyball.php">
-		<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-		Old Name: <input type="text" name="oldName"> <br /><br />
-		New Name: <input type="text" name="newName"> <br /><br />
-
-		<input type="submit" value="Update" name="updateSubmit"></p>
-	</form>
-
-	<hr />
-
-	<h2>Count the Tuples in DemoTable</h2>
-	<form method="GET" action="volleyball.php">
-		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
-		<input type="submit" name="countTuples"></p>
-	</form>
-
-	<hr />
-
-	<h2>Display Tuples in DemoTable</h2>
-	<form method="GET" action="volleyball.php">
-		<input type="hidden" id="displayTuplesRequest" name="displayTuplesRequest">
-		<input type="submit" name="displayTuples"></p>
-	</form>
-
+   <hr />
 
 	<?php
 	// The following code will be parsed as PHP
@@ -298,20 +361,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			}
 		}
 	}
-	
-	//prints results from a select statement
-	function printResult($result)
-	{ 
-		echo "<br>Retrieved data from table demoTable:<br>";
-		echo "<table>";
-		echo "<tr><th>ID</th><th>Name</th></tr>";
-
-		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-			echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
-		}
-
-		echo "</table>";
-	}
 
 	function connectToDB()
 	{
@@ -357,66 +406,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		return $tableNames;
 	}
 
-	function handleUpdateRequest()
-	{
-		global $db_conn;
-
-		$old_name = $_POST['oldName'];
-		$new_name = $_POST['newName'];
-
-		// you need the wrap the old name and new name values with single quotations
-		executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
-		oci_commit($db_conn);
-	}
-
-	function handleResetRequest()
-	{
-		global $db_conn;
-		// Drop old table
-		executePlainSQL("DROP TABLE demoTable");
-
-		// Create new table
-		echo "<br> creating new table <br>";
-		executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
-		oci_commit($db_conn);
-	}
-
-	function handleInsertRequest()
-	{
-		global $db_conn;
-
-		//Getting the values from user and insert data into the table
-		$tuple = array(
-			":bind1" => $_POST['insNo'],
-			":bind2" => $_POST['insName']
-		);
-
-		$alltuples = array(
-			$tuple
-		);
-
-		executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
-		oci_commit($db_conn);
-	}
-
-	function handleCountRequest()
-	{
-		global $db_conn;
-
-		$result = executePlainSQL("SELECT Count(*) FROM demoTable");
-
-		if (($row = oci_fetch_row($result)) != false) {
-			echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
-		}
-	}
-
-	function handleDisplayRequest()
-	{
-		global $db_conn;
-		$result = executePlainSQL("SELECT * FROM demoTable");
-		printResult($result);
-	}
-
 	function handleJoinRequest()
 	{
 
@@ -434,7 +423,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				FROM Players P, PlayerStats PS
 				WHERE P.ID = PS.PlayerID
 					AND P.ID = '" . $_GET['playerID'] . "'";
-
 
 
 		$result = executePlainSQL($sql);
@@ -495,7 +483,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-
 	function handleSearchRequest() {
 		global $db_conn;
 
@@ -508,7 +495,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			echo "Error: Invalid input format. Please enter numerical values separated by commas.";
 			return;
 		}
-
 
 		$columnNumbers = explode(',', $attributeSearchList);
 	
@@ -663,32 +649,253 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         echo "</table>";
     }
 
-	// HANDLE ALL POST ROUTES
-	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
-	function handlePOSTRequest()
-	{
-		if (connectToDB()) {
-			if (array_key_exists('resetTablesRequest', $_POST)) {
-				handleResetRequest();
-			} else if (array_key_exists('updateQueryRequest', $_POST)) {
-				handleUpdateRequest();
-			} else if (array_key_exists('insertQueryRequest', $_POST)) {
-				handleInsertRequest();
-			}
+	function handleUpdateRequest()
+             {
 
-			disconnectFromDB();
-		}
-	}
+                global $db_conn;
+                $selected_column = $_POST['selectedColumn'];
+                $player_id = (int)$_POST['playerID'];
+                $new_value = (int)$_POST['newValue'];
+
+    //              if ($selected_column === 'PlayerID') {
+    //                 $query = "UPDATE Members
+    //                           SET ID = :new_value
+    //                           WHERE ID = :player_id";
+    //              } else {
+    //                 $query = "UPDATE PlayerStats
+    //                           SET $selected_column = :new_value
+    //                           WHERE PlayerID = :player_id";
+
+                $statement = oci_parse($db_conn, $query);
+
+                oci_bind_by_name($statement, ":player_id", $player_id);
+                oci_bind_by_name($statement, ":new_value", $new_value);
+
+                $result = oci_execute($statement, OCI_DEFAULT);
+
+                if ($result) {
+                    oci_commit($db_conn);
+                    echo "<p>Stats has been updated successfully!</p>";
+                } else {
+                    echo "<p>Error updating stats!</p>";
+                }
+
+                oci_free_statement($statement);
+
+             }
+
+            function handleDeleteRequest()
+                     {
+                        global $db_conn;
+                        $team_id = (int)$_POST['teamID'];
+                        $player_id = (int)$_POST['playerID'];
+
+                        if(empty($team_id) || empty($player_id)){
+                            echo "<p>All fields must be filled!</p>";
+                            return;
+                        }
+
+                        $query = "DELETE FROM Players
+                                  WHERE ID = :player_id
+                                  AND TeamID = :team_id";
+
+                        $statement = oci_parse($db_conn, $query);
+
+                        oci_bind_by_name($statement, ":player_id", $player_id);
+                        oci_bind_by_name($statement, ":team_id", $team_id);
+
+                        $result = oci_execute($statement, OCI_DEFAULT);
+
+                        if ($result) {
+                            oci_commit($db_conn);
+                            echo "<p>Player deleted successfully!</p>";
+                        } else {
+                            echo "<p>Error deleting player!</p>";
+                        }
+
+                        oci_free_statement($statement);
+
+                     }
+
+             function handleInsertRequest()
+             {
+                global $db_conn;
+
+                $name = $_POST['name'];
+                $phoneNum = (int)$_POST['phoneNum'];
+                $address = $_POST['address'];
+                $city = $_POST['city'];
+                $birthday = $_POST['birthday'];
+                $age = (int)$_POST['age'];
+
+                if(empty($name) || empty($phoneNum) || empty($address) || empty($city) || empty($birthday) || empty($age)){
+                    echo "<p>All fields must be filled!</p>";
+                    return;
+                }
+
+                $sqlMember = "INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age)
+                              VALUES (:name, :phoneNum, :address, :city, TO_DATE(:birthday, 'YYYY-MM-DD'), :age)
+                              RETURNING ID INTO :newID";
+
+                $statement = oci_parse($db_conn, $sqlMember);
+
+                oci_bind_by_name($statement, ":name", $name);
+                oci_bind_by_name($statement, ":phoneNum", $phoneNum);
+                oci_bind_by_name($statement, ":address", $address);
+                oci_bind_by_name($statement, ":city", $city);
+                oci_bind_by_name($statement, ":birthday", $birthday);
+                oci_bind_by_name($statement, ":age", $age);
+                oci_bind_by_name($statement, ':newID', $newID, 10);
+
+                $result = oci_execute($statement, OCI_DEFAULT);
+
+                if ($result) {
+                    oci_commit($db_conn);
+                    echo "<p>You have registered successfully! Your Member ID is: $newID</p>";
+                } else {
+                    $e = oci_error($statement);
+                    echo "<p>Error: " . htmlentities($e['message']) . "</p>";
+                }
+
+                oci_free_statement($statement);
+             }
+
+             function handleCoachInsertRequest()
+             {
+                     global $db_conn;
+
+                  $id = (int)$_POST['memberID'];
+                  $yearsCoached = (int)$_POST['yearsCoached'];
+
+                  if(empty($id) || empty($yearsCoached)){
+                    echo "<p>All fields must be filled!</p>";
+                    return;
+                  }
+
+                  $check = "SELECT 1 FROM Members WHERE ID = :id";
+                  $checkStatement = oci_parse($db_conn, $check);
+                  oci_bind_by_name($checkStatement, ":id", $id);
+                  oci_execute($checkStatement);
+
+                  if (!oci_fetch($checkStatement)) {
+                      echo "<p>The ID does not exist, double check your id! Make sure you are a member first!</p>";
+                      oci_free_statement($checkStatement);
+                      return;
+                  }
+                  oci_free_statement($checkStatement);
+
+                  $sqlCoach = "INSERT INTO Coaches(ID, YearsCoached)
+                                VALUES (:id, :yearsCoached)";
+
+                  $statement = oci_parse($db_conn, $sqlCoach);
+
+                  oci_bind_by_name($statement, ":id", $id);
+                  oci_bind_by_name($statement, ":yearsCoached", $yearsCoached);
+
+                  $result = oci_execute($statement, OCI_DEFAULT);
+
+                  if ($result) {
+                      oci_commit($db_conn);
+                      echo "<p>You have registered successfully!</p>";
+                  } else {
+                      echo "<p>Error, register unsuccessful!</p>";
+                  }
+
+                  oci_free_statement($statement);
+             }
+
+            function printDivisionResult($result)
+            {
+                echo "<table>";
+                echo "<tr><th>Tournament Name</th></tr>";
+
+                while ($row = oci_fetch_assoc($result)) {
+                        echo "<tr><td>" . $row["TOURNAMENTNAME"] . "</td></tr>";
+                }
+                if (!oci_num_rows($result)) {
+                    echo "<tr><td>No data!</td></tr>";
+                }
+                echo "</table>";
+            }
+
+             function handleDivisionRequest()
+             {
+                     global $db_conn;
+
+             $query = "SELECT T1.Name AS TournamentName
+                       FROM Tournament T1
+                       WHERE NOT EXISTS (
+                           SELECT C.ClubID
+                           FROM Club C
+                           WHERE NOT EXISTS (
+                               SELECT P.TeamID
+                               FROM Participate P
+                               WHERE P.TournamentID = T1.TournamentID
+                               AND P.TeamID = C.ClubID
+                           )
+                       )";
+            $result = executePlainSQL($query);
+            printDivisionResult($result);
+             }
+
+             function printCheckStatsResult($result)
+                     {
+                        echo "<table>";
+                        echo "<tr>
+                            <th>STATID</th>
+                            <th>PLAYERID</th>
+                            <th>MATCHESPLAYED</th>
+                            <th>GAMESWON</th>
+                            <th>NUMOFPOINTS</th>
+                        </tr>";
+                        while ($row = oci_fetch_assoc($result)) {
+                                 echo "<tr>";
+                                 foreach ($row as $value) {
+                                     echo "<td>$value</td>";
+                                 }
+                                 echo "</tr>";
+                         }
+                         if (!oci_num_rows($result)) {
+                             echo "<tr><td>No data!</td></tr>";
+                         }
+                         echo "</table>";
+                     }
+
+        function handleDisplayRequest(){
+             global $db_conn;
+             $query = "SELECT * FROM PlayerStats";
+             $result = executePlainSQL($query);
+             printCheckStatsResult($result);
+        }
+
+    	// HANDLE ALL POST ROUTES
+        // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
+        function handlePOSTRequest(){
+            if (connectToDB()) {
+                if (array_key_exists('resetTablesRequest', $_POST)) {
+                    handleResetRequest();
+                } else if (array_key_exists('updateStatsRequest', $_POST)) {
+                    handleUpdateRequest();
+                } else if (array_key_exists('insertQueryRequest', $_POST)) {
+                    handleInsertRequest();
+                } else if (array_key_exists('insertQueryRequestCoach', $_POST)) {
+                    handleCoachInsertRequest();
+                } else if (array_key_exists('deletePlayerRequest', $_POST)) {
+                    handleDeleteRequest();
+                }
+                disconnectFromDB();
+            }
+        }
 
 	// HANDLE ALL GET ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handleGETRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('countTuples', $_GET)) {
-				handleCountRequest();
-			} elseif (array_key_exists('displayTuples', $_GET)) {
+			if (array_key_exists('checkPlayerStats', $_GET)) {
 				handleDisplayRequest();
+			} elseif (array_key_exists('displayTournament', $_GET)) {
+				handleDivisionRequest();
 			} elseif (array_key_exists('join', $_GET)) {
 				handleJoinRequest();
 			} elseif (array_key_exists('avgSponsorship', $_GET)) {
