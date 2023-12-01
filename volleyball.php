@@ -77,14 +77,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             background-color: #1e6091;
             color: #ffffff;
         }
-		
+
     </style>
 </head>
 
 <body>
 	<h1> CPSC 304 Volleyball Database </h1>
 	<h1> <img class="volleyball-image" src="https://t4.ftcdn.net/jpg/04/18/08/23/360_F_418082327_vJjeEA2NMyk7Eg8JpdlJsC2LVMBwj7CV.jpg"
-              alt="Volleyball Image" width="400" height="400"> </h1>
+              alt="Volleyball Image" width="300" height="300"> </h1>
     <hr />
 
     <h2>Please register as a member below!</h2>
@@ -238,11 +238,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<hr />
 
     <!-- SELECTION: Members from Vancouver-->
-    <h2> SELECTION </h2>
-    <p>Find the name and birthdate of members residing in</p>
+    <h2>Member DoB</h2>
+    <p>DoB for members residing in</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="selectionRequest" name="selectionRequest">
-        city: <input type="text" name="city"> <br /><br />
+        <input type="text" name="city" placeholder="city"> <br /><br />
         <input type="submit" name="selection"></p>
     </form>
 
@@ -254,8 +254,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <hr />
 
     <!-- AGGREGATION W GROUP BY: -->
-    <h2> AGGREGATION WITH GROUP BY </h2>
-    <p>Find the number of players in each team in our database</p>
+    <h2>Team Size</h2>
+    <!-- <p>Find the number of players in each team in our database</p> -->
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="AggGBRequest" name="AggGBRequest">
         <input type="submit" name="AggGB"></p>
@@ -267,8 +267,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         ?>
     <hr />
     <!-- AGGREGATION W HAVING: -->
-    <h2> AGGREGATION WITH HAVING </h2>
-    <p>Find the list of organizations with an average sponsorship amount of $200K+ for tournaments</p>
+    <h2> Our Valued Sponsors </h2>
+    <p>List of organizations with an average sponsorship amount of $200K+ for tournaments</p>
     <form method="GET" action="volleyball.php">
         <input type="hidden" id="AggHRequest" name="AggHRequest">
         <input type="submit" name="AggH"></p>
@@ -607,8 +607,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     {
         global $db_conn;
 
-        $sql = "SELECT TeamID, COUNT(*) AS NumPlayers 
-                FROM Players 
+        $sql = "SELECT TeamID, COUNT(*) AS NumPlayers
+                FROM Players
                 GROUP BY TeamID";
         $result = executePlainSQL($sql);
 

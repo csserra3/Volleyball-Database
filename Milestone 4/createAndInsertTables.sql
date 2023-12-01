@@ -255,7 +255,12 @@ INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (2,10,'Middle',
 INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (3,16,'Setter',3,663321);
 INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (4,9,'Power',5,332244);
 INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (5,6,'Libero',5,562525);
-
+INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (6,10,'Middle',1,556622);
+INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (7,10,'Middle',2,000003);
+INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (8,11,'Setter',4,000004);
+INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (9,11,'Middle',4,000005);
+INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (10,1,'Middle',4,000006);
+COMMIT;
 
 INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)VALUES (1, 1, 5, 2, 2000);
 INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)VALUES (2, 2, 25, 10, 900);
