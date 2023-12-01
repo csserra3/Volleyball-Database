@@ -114,7 +114,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 
 	<!-- JOIN: Members & Players table, search by PlayerID -->
-	<h2> JOIN</h2>
+	<h2> Checkout some player stats! </h2>
 	<form method="GET" action="volleyball.php">
 		<input type="hidden" id="joinRequest" name="joinRequest">
 		Player ID: <input type="text" name="playerID"> <br /><br />
@@ -298,9 +298,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			}
 		}
 	}
-
+	
+	//prints results from a select statement
 	function printResult($result)
-	{ //prints results from a select statement
+	{ 
 		echo "<br>Retrieved data from table demoTable:<br>";
 		echo "<table>";
 		echo "<tr><th>ID</th><th>Name</th></tr>";
@@ -483,9 +484,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "<br>Tournaments & Average Sponsorships:<br>";
 		echo "<table border='1'>";
 		echo "<tr><th>Tournament</th><th>Average Sponsorship Amount Received</th></tr>";
-		// echo($result);
+
 		while ($row = OCI_fetch_array($result, OCI_NUM)) {
-			// echo($row[1]);
 			echo "<tr>";
 			echo "<td>" . $row[0] . "</td>";
 			echo "<td>$" . $row[1] . "</td>";
@@ -707,15 +707,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-	// isset($_GET['joinRequest'])
 	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest']) || isset($_GET['avgSponsorshipRequest']) || (isset($_GET['selectedTable']) && isset($_GET['attributeSearch']))) {
+	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest']) || isset($_GET['avgSponsorshipRequest']) 
+			|| (isset($_GET['selectedTable']) && isset($_GET['attributeSearch'])) || isset($_GET['selectionRequest']) || (isset($_GET['AggGBRequest']) || isset($_GET['AggHRequest']) )) {
 		handleGETRequest();
-	} else if (isset($_GET['selectionRequest'])) {
-        handleGETRequest();
-    } else if (isset($_GET['AggGBRequest']) || isset($_GET['AggHRequest']) ) {
-        handleGETRequest();
     }
 
 	// End PHP parsing and send the rest of the HTML content
