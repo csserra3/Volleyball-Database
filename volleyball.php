@@ -1,19 +1,3 @@
-<!-- Test Oracle file for UBC CPSC304
-  Created by Jiemin Zhang
-  Modified by Simona Radu
-  Modified by Jessica Wong (2018-06-22)
-  Modified by Jason Hall (23-09-20)
-  This file shows the very basics of how to execute PHP commands on Oracle.
-  Specifically, it will drop a table, create a table, insert values update
-  values, and then query for values
-  IF YOU HAVE A TABLE CALLED "demoTable" IT WILL BE DESTROYED
-  The script assumes you already have a server set up All OCI commands are
-  commands to the Oracle libraries. To get the file to work, you must place it
-  somewhere where your Apache server can run it, and you must rename it to have
-  a ".php" extension. You must also change the username and password on the
-  oci_connect below to be your ORACLE username and password
--->
-
 <?php
 // The preceding tag tells the web server to parse the following text as PHP
 // rather than HTML (the default)
@@ -149,7 +133,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
             What do you want to update?:
             <select name="selectedColumn">
-                <option value="PlayerID">Player ID</option>
+                <option value="SIN">SIN</option>
+                <option value="SIN">Jersey Number</option>
+                <option value="SIN">Position</option>
                 <option value="MatchesPlayed">Matches Played</option>
                 <option value="GamesWon">Games Won</option>
                 <option value="NumberofPoints">Number of Points</option>
@@ -188,28 +174,20 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
             <hr />
 
-            <h2>Check player stats</h2>
-                <form method="GET" action="volleyball.php">
-                    <input type="hidden" id="displayPlayerStatRequest" name="displayPlayerStatRequest">
-                    <input type="submit" value="Check Stats" name="checkPlayerStats"></p>
-                </form>
-
-                <?php
-                   if (isset($_GET['displayPlayerStatRequest'])){
-                       handleGETRequest();
-                   }
-                ?>
-
-                <hr />
-
 	<!-- JOIN: Members & Players table, search by PlayerID -->
 	<h2> Checkout some player stats! </h2>
 	<form method="GET" action="volleyball.php">
 		<input type="hidden" id="joinRequest" name="joinRequest">
 		Player ID: <input type="text" name="playerID"> <br /><br />
 
-		<input type="submit" name="join"></p>
+		<input type="submit" value="Check" name="join"></p>
 	</form>
+
+	<?php
+        if (isset($_GET['join'])){
+            handleGETRequest();
+        }
+    ?>
 
 	<hr />
 
@@ -219,6 +197,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		<input type="hidden" id="avgSponsorshipRequest" name="avgSponsorshipRequest">
 		<input type="submit" name="avgSponsorship"></p>
 	</form>
+
+    <?php
+        if (isset($_GET['avgSponsorship'])){
+            handleGETRequest();
+        }
+    ?>
 
 	<hr />
 
@@ -245,6 +229,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		<input type="submit" name="displayTableSubmit" value="Search">
 	</form>
 
+    <?php
+            if (isset($_GET['displayTableSubmit'])){
+                handleGETRequest();
+            }
+        ?>
+
 	<hr />
 
     <!-- SELECTION: Members from Vancouver-->
@@ -256,6 +246,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <input type="submit" name="selection"></p>
     </form>
 
+    <?php
+            if (isset($_GET['selection'])){
+                handleGETRequest();
+            }
+        ?>
     <hr />
 
     <!-- AGGREGATION W GROUP BY: -->
@@ -265,6 +260,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <input type="hidden" id="AggGBRequest" name="AggGBRequest">
         <input type="submit" name="AggGB"></p>
     </form>
+    <?php
+            if (isset($_GET['AggGB'])){
+                handleGETRequest();
+            }
+        ?>
+    <hr />
     <!-- AGGREGATION W HAVING: -->
     <h2> AGGREGATION WITH HAVING </h2>
     <p>Find the list of organizations with an average sponsorship amount of $200K+ for tournaments</p>
@@ -272,6 +273,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <input type="hidden" id="AggHRequest" name="AggHRequest">
         <input type="submit" name="AggH"></p>
     </form>
+
+    <?php
+            if (isset($_GET['AggH'])){
+                handleGETRequest();
+            }
+        ?>
+
     <hr />
 
     <h2>Click to check which tournament every club participates</h2>
@@ -419,17 +427,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			return;
 		}
 
-		$sql = "SELECT P.ID, P.JerseyNum, P.Position, P.TeamID, PS.StatID, PS.MatchesPlayed, PS.GamesWon, PS.NumofPoints
+		$sql = "SELECT P.ID, P.SIN, P.JerseyNum, P.Position, P.TeamID, PS.StatID, PS.MatchesPlayed, PS.GamesWon, PS.NumofPoints
 				FROM Players P, PlayerStats PS
 				WHERE P.ID = PS.PlayerID
 					AND P.ID = '" . $_GET['playerID'] . "'";
-
 
 		$result = executePlainSQL($sql);
 
 		echo "<br>Retrieved data from the join query:<br>";
 		echo "<table border='1'>";
-		echo "<tr><th>ID</th><th>JerseyNum</th><th>Position</th><th>TeamID</th><th>StatID</th><th>MatchesPlayed</th><th>GamesWon</th><th>NumofPoints</th></tr>";
+		echo "<tr><th>ID</th><th>SIN</th><th>JerseyNum</th><th>Position</th><th>TeamID</th><th>StatID</th><th>MatchesPlayed</th><th>GamesWon</th><th>NumofPoints</th></tr>";
 		
 		while ($row = OCI_fetch_array($result, OCI_NUM)) {
 
@@ -448,6 +455,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			echo "<td>" . $row[5] . "</td>";
 			echo "<td>" . $row[6] . "</td>";
 			echo "<td>" . $row[7] . "</td>";
+			echo "<td>" . $row[8] . "</td>";
 			echo "</tr>";
 		}
 		echo "</table>";
@@ -657,14 +665,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                 $player_id = (int)$_POST['playerID'];
                 $new_value = (int)$_POST['newValue'];
 
-    //              if ($selected_column === 'PlayerID') {
-    //                 $query = "UPDATE Members
-    //                           SET ID = :new_value
-    //                           WHERE ID = :player_id";
-    //              } else {
-    //                 $query = "UPDATE PlayerStats
-    //                           SET $selected_column = :new_value
-    //                           WHERE PlayerID = :player_id";
+                 if ($selected_column === 'SIN' || $selected_column === 'JerseyNum' || $selected_column === 'Position') {
+                    $query = "UPDATE Players
+                              SET $selected_column = :new_value
+                              WHERE ID = :player_id";
+                 } else {
+                    $query = "UPDATE PlayerStats
+                              SET $selected_column = :new_value
+                              WHERE PlayerID = :player_id";
+                 }
 
                 $statement = oci_parse($db_conn, $query);
 
@@ -838,36 +847,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             printDivisionResult($result);
              }
 
-             function printCheckStatsResult($result)
-                     {
-                        echo "<table>";
-                        echo "<tr>
-                            <th>STATID</th>
-                            <th>PLAYERID</th>
-                            <th>MATCHESPLAYED</th>
-                            <th>GAMESWON</th>
-                            <th>NUMOFPOINTS</th>
-                        </tr>";
-                        while ($row = oci_fetch_assoc($result)) {
-                                 echo "<tr>";
-                                 foreach ($row as $value) {
-                                     echo "<td>$value</td>";
-                                 }
-                                 echo "</tr>";
-                         }
-                         if (!oci_num_rows($result)) {
-                             echo "<tr><td>No data!</td></tr>";
-                         }
-                         echo "</table>";
-                     }
-
-        function handleDisplayRequest(){
-             global $db_conn;
-             $query = "SELECT * FROM PlayerStats";
-             $result = executePlainSQL($query);
-             printCheckStatsResult($result);
-        }
-
     	// HANDLE ALL POST ROUTES
         // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
         function handlePOSTRequest(){
@@ -892,9 +871,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handleGETRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('checkPlayerStats', $_GET)) {
-				handleDisplayRequest();
-			} elseif (array_key_exists('displayTournament', $_GET)) {
+			if (array_key_exists('displayTournament', $_GET)) {
 				handleDivisionRequest();
 			} elseif (array_key_exists('join', $_GET)) {
 				handleJoinRequest();
@@ -913,13 +890,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			disconnectFromDB();
 		}
 	}
-
-	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
-		handlePOSTRequest();
-	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest']) || isset($_GET['joinRequest']) || isset($_GET['avgSponsorshipRequest']) 
-			|| (isset($_GET['selectedTable']) && isset($_GET['attributeSearch'])) || isset($_GET['selectionRequest']) || (isset($_GET['AggGBRequest']) || isset($_GET['AggHRequest']) )) {
-		handleGETRequest();
-    }
 
 	// End PHP parsing and send the rest of the HTML content
 	?>

@@ -15,6 +15,7 @@ DROP TABLE Tournament;
 DROP TABLE Facility;
 DROP TABLE Organization;
 
+
 CREATE TABLE Organization
 (
     OrganizationID  INTEGER,
@@ -96,7 +97,7 @@ CREATE TABLE Coaches
     ID              INTEGER,
     YearsCoached    INTEGER,
     PRIMARY KEY (ID),
-    FOREIGN KEY (ID) REFERENCES Members
+    FOREIGN KEY (ID) REFERENCES Members ON DELETE CASCADE
 );
 
 CREATE TABLE Team
@@ -144,10 +145,10 @@ CREATE TABLE Players
 CREATE TABLE PlayerStats
 (
     StatID        INTEGER,
-    PlayerID      INTEGER,
+    PlayerID      INTEGER UNIQUE,
     MatchesPlayed INTEGER,
     GamesWon      INTEGER,
-    NumOfPoints   INTEGER,
+    NumofPoints   INTEGER,
     PRIMARY KEY (StatID),
     FOREIGN KEY (PlayerID) REFERENCES Players ON DELETE CASCADE
 );
@@ -171,7 +172,6 @@ CREATE TABLE Teaches
     FOREIGN KEY (ID) REFERENCES Members,
     FOREIGN KEY (TeamID) REFERENCES Team
 );
---
 -- -- INSERT STATEMENTS
 INSERT INTO Organization (OrganizationID, Name, AmountSponsored) VALUES (1, 'OrganizationOne', 10000);
 INSERT INTO Organization (OrganizationID, Name, AmountSponsored) VALUES (2, 'OrganizationTwo', 10000);
@@ -197,11 +197,16 @@ INSERT INTO Club(ClubID, Name, Location) VALUES (00003, 'ClubThree', '4102 Ocean
 INSERT INTO Club(ClubID, Name, Location) VALUES (00004, 'ClubFour', '3032 Bob Ave');
 INSERT INTO Club(ClubID, Name, Location) VALUES (00005, 'ClubFive', '553 Smith St');
 
-INSERT INTO Members(ID, Name, PhoneNum, Address, City, BirthDate, Age) VALUES (1, 'Bob Smith', 6045555555, '123 Sunny Ave', 'Vancouver', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 20);
-INSERT INTO Members(ID, Name, PhoneNum, Address, City, BirthDate, Age) VALUES (2, 'Joe David', 6045557777, '333 Flemings Ave', 'Vancouver', TO_DATE('1991-02-01', 'YYYY-MM-DD'), 19);
-INSERT INTO Members(ID, Name, PhoneNum, Address, City, BirthDate, Age) VALUES (3, 'Billy Smith', 6045555566, '555 Water Ave', 'Burnaby', TO_DATE('2000-11-10', 'YYYY-MM-DD'), 19);
-INSERT INTO Members(ID, Name, PhoneNum, Address, City, BirthDate, Age) VALUES  (4, 'Sue Anderson', 6045555353, '6063 Blue Street', 'Richmond', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 22);
-INSERT INTO Members(ID, Name, PhoneNum, Address, City, BirthDate, Age) VALUES (5, 'Michael Scott', 6045555151, '2323 80 Ave', 'Surrey', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 24);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES ('Bob Smith', 6045555555, '123 Sunny Ave', 'Vancouver', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 20);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES ('Joe David', 6045557777, '333 Flemings Ave', 'Vancouver', TO_DATE('1991-02-01', 'YYYY-MM-DD'), 19);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES ('Billy Smith', 6045555566, '555 Water Ave', 'Burnaby', TO_DATE('2000-11-10', 'YYYY-MM-DD'), 19);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES  ('Sue Anderson', 6045555353, '6063 Blue Street', 'Richmond', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 22);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES ('Michael Scott', 6045555151, '2323 80 Ave', 'Surrey', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 24);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES ('Eric Wong', 7785555555, '123 Sunny Ave', 'Vancouver', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 20);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES ('Joe Anthony', 7785557777, '333 Flemings Ave', 'Vancouver', TO_DATE('1991-02-01', 'YYYY-MM-DD'), 19);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES ('Billy While', 7785555566, '555 Water Ave', 'Burnaby', TO_DATE('2000-11-10', 'YYYY-MM-DD'), 19);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES  ('Odin Anderson', 6047775353, '6063 Blue Street', 'Richmond', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 22);
+INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age) VALUES ('Michael Hilario', 6045559898, '2323 80 Ave', 'Surrey', TO_DATE('1996-01-01', 'YYYY-MM-DD'), 24);
 
 INSERT INTO Certification(CertificationID, CertificateName, ExpirationDate) VALUES (55551, 'CertOne', TO_DATE('2023-06-12', 'YYYY-MM-DD'));
 INSERT INTO Certification(CertificationID, CertificateName, ExpirationDate) VALUES (55552, 'CertTwo', TO_DATE('2023-02-11', 'YYYY-MM-DD'));
@@ -221,17 +226,17 @@ INSERT INTO HostedAt(TournamentID, FacilityID) VALUES (3, 3);
 INSERT INTO HostedAt(TournamentID, FacilityID) VALUES (4, 4);
 INSERT INTO HostedAt(TournamentID, FacilityID) VALUES (5, 5);
 
-INSERT INTO Coaches(ID, YearsCoached) VALUES (1, 2);
-INSERT INTO Coaches(ID, YearsCoached) VALUES (2, 3);
-INSERT INTO Coaches(ID, YearsCoached) VALUES (3, 5);
-INSERT INTO Coaches(ID, YearsCoached) VALUES (4, 7);
-INSERT INTO Coaches(ID, YearsCoached) VALUES (5, 10);
+INSERT INTO Coaches(ID, YearsCoached) VALUES (6, 2);
+INSERT INTO Coaches(ID, YearsCoached) VALUES (7, 3);
+INSERT INTO Coaches(ID, YearsCoached) VALUES (8, 5);
+INSERT INTO Coaches(ID, YearsCoached) VALUES (9, 7);
+INSERT INTO Coaches(ID, YearsCoached) VALUES (10, 10);
 
-INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (1, 1, 1, 12);
-INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (2, 2, 2, 14);
-INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (3, 3, 3, 12);
-INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (4, 4, 4, 12);
-INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (5, 5, 5, 14);
+INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (1, 1, 6, 12);
+INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (2, 2, 7, 14);
+INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (3, 3, 8, 12);
+INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (4, 4, 9, 12);
+INSERT INTO Team(TeamID, ClubID, CoachID, NumPlayers) VALUES (5, 5, 10, 14);
 
 INSERT INTO Manages(ClubID, TeamID) VALUES (00001, 1);
 INSERT INTO Manages(ClubID, TeamID) VALUES (00002, 2);
@@ -251,21 +256,29 @@ INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (3,16,'Setter',
 INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (4,9,'Power',5,332244);
 INSERT INTO Players(ID, JerseyNum, Position, TeamID, SIN) VALUES (5,6,'Libero',5,562525);
 
+
 INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)VALUES (1, 1, 5, 2, 2000);
 INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)VALUES (2, 2, 25, 10, 900);
 INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)VALUES (3, 3, 10, 2, 2000);
 INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)VALUES (4, 4, 7, 2, 2000);
 INSERT INTO PlayerStats(StatID, PlayerID, MatchesPlayed, GamesWon, NumOfPoints)VALUES (5, 5, 5, 2, 2000);
 
-INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (1, 1, 'Safe Sport', TO_DATE('2012-03-10', 'YYYY-MM-DD'));
-INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (2, 2, 'Safe Sport', TO_DATE('2014-05-11', 'YYYY-MM-DD'));
-INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (3, 3, 'Safe Sport', TO_DATE('2016-07-23', 'YYYY-MM-DD'));
-INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (4, 4, 'Safe Sport', TO_DATE('2017-01-20', 'YYYY-MM-DD'));
-INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (5, 5, 'Safe Sport', TO_DATE('2011-09-2', 'YYYY-MM-DD'));
+INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (1, 6, 'Safe Sport', TO_DATE('2012-03-10', 'YYYY-MM-DD'));
+INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (2, 7, 'Safe Sport', TO_DATE('2014-05-11', 'YYYY-MM-DD'));
+INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (3, 8, 'Safe Sport', TO_DATE('2016-07-23', 'YYYY-MM-DD'));
+INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (4, 9, 'Safe Sport', TO_DATE('2017-01-20', 'YYYY-MM-DD'));
+INSERT INTO Gets(GetID, MemberID, CertificateName, DateCertified) VALUES (5, 10, 'Safe Sport', TO_DATE('2011-09-2', 'YYYY-MM-DD'));
 
-INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (1, 1, 1);
-INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (2, 2, 2);
-INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (3, 3, 3);
-INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (4, 4, 4);
-INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (5, 5, 5);
+INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (1, 1, 6);
+INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (2, 2, 7);
+INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (3, 3, 8);
+INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (4, 4, 9);
+INSERT INTO Teaches(TeachID, TeamID, ID) VALUES (5, 5, 10);
+
+INSERT INTO Tournament(TournamentID, Name, FacilityName, SponsorID, StartDate, EndDate) VALUES  (6, 'Provincials Championship', 'FacilityFive', 5, TO_DATE('2024-06-25', 'YYYY-MM-DD'), TO_DATE('2024-06-29', 'YYYY-MM-DD'));
+INSERT INTO Participate(TeamID, TournamentID) VALUES (1, 6);
+INSERT INTO Participate(TeamID, TournamentID) VALUES (2, 6);
+INSERT INTO Participate(TeamID, TournamentID) VALUES (3, 6);
+INSERT INTO Participate(TeamID, TournamentID) VALUES (4, 6);
+INSERT INTO Participate(TeamID, TournamentID) VALUES (5, 6);
 
