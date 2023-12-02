@@ -27,7 +27,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <html>
 
 <head>
-	<title>CPSC 304 Volleyball Database</title>
+	<title>VolleyVision Pro</title>
 	<style>
         body {
             background-color: #ffffff;
