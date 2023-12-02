@@ -742,6 +742,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                     return;
                 }
 
+                // Validation method below referred to StackOverflow https://stackoverflow.com/questions/17577584/php-check-user-input-date
+                $dateObj = DateTime::createFromFormat('Y-m-d', $birthday);
+
+                if (!$dateObj || $dateObj->format('Y-m-d') !== $birthday) {
+                    echo "<p>Invalid date format! Please use yyyy-mm-dd. For example, 1990-05-10 for May 10th, 1990.</p>";
+                    return;
+                }
+
                 $sqlMember = "INSERT INTO Members(Name, PhoneNum, Address, City, Birthdate, Age)
                               VALUES (:name, :phoneNum, :address, :city, TO_DATE(:birthday, 'YYYY-MM-DD'), :age)
                               RETURNING ID INTO :newID";
@@ -813,6 +821,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                   oci_free_statement($statement);
              }
 
+           //Referred to Starter code
             function printDivisionResult($result)
             {
                 echo "<table>";
