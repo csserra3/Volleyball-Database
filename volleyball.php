@@ -82,7 +82,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </head>
 
 <body>
-	<h1> CPSC 304 Volleyball Database </h1>
+	<h1> VolleyVision Pro </h1>
 	<h1> <img class="volleyball-image" src="https://t4.ftcdn.net/jpg/04/18/08/23/360_F_418082327_vJjeEA2NMyk7Eg8JpdlJsC2LVMBwj7CV.jpg"
               alt="Volleyball Image" width="300" height="300"> </h1>
     <hr />
