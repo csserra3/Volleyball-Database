@@ -168,7 +168,7 @@ CREATE TABLE Teaches
     TeachID    INTEGER,
     TeamID     INTEGER,
     ID         INTEGER,
-    PRIMARY KEY (ID),
+    PRIMARY KEY (TeachID),
     FOREIGN KEY (ID) REFERENCES Members,
     FOREIGN KEY (TeamID) REFERENCES Team
 );
@@ -286,4 +286,3 @@ INSERT INTO Participate(TeamID, TournamentID) VALUES (2, 6);
 INSERT INTO Participate(TeamID, TournamentID) VALUES (3, 6);
 INSERT INTO Participate(TeamID, TournamentID) VALUES (4, 6);
 INSERT INTO Participate(TeamID, TournamentID) VALUES (5, 6);
-
